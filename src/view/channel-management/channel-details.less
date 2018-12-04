@@ -1,0 +1,140 @@
+.channel-details{
+	position: relative;
+	height: 100%;
+	.title{
+		font-size:24px;
+		padding:16px;
+		border-radius:4px;
+		box-shadow: 1px 1px 2px 3px rgba(100, 100, 100, 0.1);
+		overflow: hidden;
+		p{
+			float: left;
+		}
+		.channelName{
+			box-sizing: border-box;
+			margin-left: 10px;
+			position: relative;
+			.ivu-btn{
+				// display: inline-block;
+				background: #2d8cf0;
+				color:#fff;
+				font-size: 14px;
+				font-weight: bold;
+				border-radius: 4px;
+				padding: 5px 10px;
+			}
+			.ivu-btn:hover{
+				background: #57A3F3
+			}
+		}
+		
+	}
+	.ivu-table-wrapper{
+		border-color: transparent;
+	}
+	
+	.table{
+		position: absolute;
+		top: 85px;
+		left: 0;
+		right: 0;
+		bottom: 0px;
+		border:none;
+		.tableTitle{
+			padding: 3px;
+			text-align: right;
+			margin-bottom: 10px;
+			overflow: hidden;
+		}
+		.detailsTable{
+			position: absolute;
+			top: 45px;
+			left: 0;right: 0;
+			bottom: 50px;
+			overflow: auto;
+		}
+		.detailsPage{
+			position: absolute;
+			right: 0;bottom: 0;
+		}
+		.ivu-table-body{
+
+			overflow:hidden;
+		}
+		.ivu-tooltip{
+			width: 100%;
+			.ivu-tooltip-rel{
+				width: 100%;
+			}
+		}
+	}
+}
+.tree{
+	position: relative;
+	padding:0 22px;
+	display: flex;
+	justify-content: space-between;
+	.ivu-input-number{width: 100%;}
+	.selectOrg{
+        position: relative;
+        margin-bottom: 10px;
+        width:240px;
+    }
+    .selectOrg .selectOrg-title,.selectOrg-content{
+        float:none;
+    }
+    .selectOrg .selectOrg-title{
+        display:inline-block;
+        text-align: right;
+        vertical-align: middle;
+        font-size: 12px;
+        color: #495060;
+        line-height: 1;
+        padding: 10px 12px 10px 0;
+        box-sizing: border-box;
+    }
+    .ivu-tree{
+        width: 240px;
+        min-height: 18px;
+        position: absolute;
+        top: 65px;
+        left: 22px;
+        z-index: 100;
+        background: #fff;
+        border:1px solid #57A3F3;
+        padding-left:5px;
+        border-radius: 4px;
+        overflow: auto;
+        transition: all 0.5s linear;
+    }
+	
+}
+.channelUserModal .ivu-modal-body{
+	padding:10px 0;
+}
+
+.channelUserModal .transfer{
+	display: flex;
+	justify-content:center;
+}
+
+.channelUserModal .ivu-transfer-list-content-item{
+	padding:7px 8px;
+	overflow:hidden;
+	text-overflow:ellipsis;
+	white-space:nowrap 
+}
+.channelUserModal .ivu-checkbox-wrapper{
+	margin-right: 0px;
+}
+.channelUserModal .ivu-transfer-operation{
+	margin:0 8px;
+}
+.channelUserModal .ivu-transfer-list-content-item:hover{
+	color:#2DB7F5;
+}
+.transfer .ivu-transfer .ivu-transfer-operation button{
+	width: 80px;
+	text-align: center;
+	padding:5px 0;
+}

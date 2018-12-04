@@ -1,0 +1,506 @@
+<script type="text/javascript">
+  /* eslint-disable */
+</script>
+<style rel="stylesheet" lang="less">
+    @import "../../styles/common.less";
+    @import "./SN-management.less";
+    
+</style>
+<template>
+    <div class="SN_manager">
+        <Card class="searchCard">
+            <div style="overflow:hidden">
+                <div class="searchBox">
+                    <span>{{$t('SN')}}：</span> 
+                    <Input v-model="searchMes.sn" clearable  type="text"  style="width:200px"/>
+                </div>
+                <div class="searchBox">
+                    <span>{{$t('alarmType')}}：</span>
+                    <Input v-model="searchMes.snType" clearable type="text"  style="width:200px"/>
+                </div>
+                <div class="searchBox">
+                    <span>{{$t('state')}}：</span>
+                    <Select v-model="searchMes.resState" style="width:200px">
+                        <Option v-for="item in stateList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                    </Select>
+                </div>
+                <div class="searchBox">
+                    <Button type="primary" @click='search'>&nbsp;&nbsp;{{$t('search')}}&nbsp;&nbsp;</Button>
+                </div>
+            </div>
+        </Card>
+        <div class="content">
+            <div class="btns">
+                <Select v-model="isAllSN" @on-change="changeIsAllSN" style="width:100px">
+                    <Option :value="1" :key="1">{{ $t('allSN') }}</Option>
+                    <Option :value="0" :key="0">{{ $t('mySN') }}</Option>
+                </Select>
+                <!-- <Button v-if="!isAllSN" type="primary" @click="batchImportModal">{{$t('account_import')}}</Button> -->
+                <Button v-if="!isAllSN" type="primary" @click="assign">{{$t('assign')}}</Button>
+            </div>
+            <div class="tableBox">
+                <Table @on-selection-change="tableSelection" ref="selection" :columns="tableColums" :data="tableData"></Table>
+            </div>
+        </div>
+        
+        <div class="page">
+            <div style="float: right;">
+                <Page 
+                    ref='page'
+                    @on-change="changePage" 
+                    @on-page-size-change="changePageSize"
+                    :total=page.total 
+                    :page-size-opts = "[10,20,50]"
+                    show-elevator 
+                    show-sizer 
+                    show-total
+                    placement="top"
+                ></Page>
+            </div>
+        </div>
+        <!-- 批量导入 -->
+        <Modal :title="batchImport" v-model="modal11" :width="800">
+            <a class="example" href="./example.xlsx">{{$t('Example')}}</a>
+            <upload-excel ref="uploadExcel" @uploadTableData="uploadTableData"></upload-excel>
+            <div slot="footer">
+                <Button type="default" size="large" @click="modal11=false">
+                    {{$t('cancel')}}
+                </Button>
+                <Button type="primary" size="large" @click="sendBatchImport">
+                    {{$t('ok')}}
+                </Button>
+            </div>
+        </Modal>
+        <!-- 导入结果 -->
+        <Modal 
+            :title="Result" 
+            class="importResult"
+            v-model="modal12" 
+            :value="tabName"     
+            >
+            <Tabs type="card" @on-click="tabChange">
+                <TabPane :label="successList" name="name1">
+                    <Table border :columns="importSuccessColumns" :data="importSuccessData"></Table>
+                </TabPane>
+                <TabPane :label="errorList" name="name2">
+                    <Table border :columns="importFailurecolumns" :data="importFailureData"></Table>
+                </TabPane>
+            </Tabs>
+            <div slot="footer">
+                <Button  type="default" size="large" @click="modal12=false">
+                    {{$t('cancel')}}
+                </Button>
+                <Button  v-if="tabName=='name1'" type="primary" size="large" @click="batchSaveEdposUser">
+                    {{$t('user_table_btn_batchImport')}}
+                </Button>
+            </div>
+        </Modal>
+        <Modal 
+            :title="Assign" 
+            v-model="modal1" 
+            class='AssginSN'
+            >
+            <div style="margin:15px 0">
+                <span style="display:inline-block;text-align:right;width:120px;">{{$t('agent')}}：</span>
+                <Select v-model="assignAgentId" style="width:300px">
+                    <Option v-for="item in agentList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                </Select>
+            </div>
+            
+            <div slot="footer">
+                <Button  type="default" size="large" @click="modal1=false">
+                    {{$t('cancel')}}
+                </Button>
+                <Button type="primary" size="large" @click="modal1=false;modal2=true">
+                    {{$t('ok')}}
+                </Button>
+            </div>
+        </Modal>
+        <Modal 
+            :title="Assign" 
+            v-model="modal2" 
+            class='AssginSN'
+            >
+           
+            <h1 style="text-align:center;margin:10px;">{{$t('confirmAssign')}}</h1>
+            <div slot="footer">
+                <Button  type="default" size="large" @click="modal1=false">
+                    {{$t('cancel')}}
+                </Button>
+                <Button type="primary" size="large" @click="sendAssign">
+                    {{$t('ok')}}
+                </Button>
+            </div>
+        </Modal>
+    </div>
+    
+</template>
+
+<script type="ecmascript-6">
+import { querySnResources,batchCheckSN,batchSaveSN,assignSN } from '@/api/sn'
+import uploadExcel from '@/view/excel/upload-excel'
+import { queryAgentCompany } from '@/api/agent'
+export default {
+    components:{
+        uploadExcel
+    },
+    created:function(){
+        this.getSnResources()
+        this.getAgentList()
+    },
+    data () {
+    	return{
+            myAgentId:this.$store.state.user.userObj.agentId,
+            isAllSN:1,
+            modal1: false, // 
+            modal2: false, // 
+            modal11: false, // 批量导入
+            modal12: false, // 批量导入结果
+            searchMes:{
+                sn:'',
+                snType:'',
+                resState:2
+            },
+            stateList:[
+                {
+                    value:2,
+                    label:this.$t('all')
+                },
+                {
+                    value:0,
+                    label:this.$t('used')
+                },
+                {
+                    value:1,
+                    label:this.$t('unused')
+                }
+            ],
+            tableData:[],
+            tableColums:[
+                {
+                    type: 'selection',
+                    width: 60,
+                    align: 'center'
+                },
+                {
+                  title: this.$t('SN'),
+                  key: 'sn',
+                  ellipsis: true,
+                  render: (h, params) => {
+                    return h('Tooltip', {
+                      props: { placement: 'top-start' }
+                    }, [
+                      params.row.sn,
+                      h('span', { slot: 'content', style: { whiteSpace: 'normal', wordBreak: 'break-all' } }, params.row.sn)
+                    ])
+                  }
+                },
+                {
+                  title: this.$t('alarmType'),
+                  key: 'snType',
+                  ellipsis: true,
+                  render: (h, params) => {
+                    return h('Tooltip', {
+                      props: { placement: 'top-start' }
+                    }, [
+                      params.row.snType,
+                      h('span', { slot: 'content', style: { whiteSpace: 'normal', wordBreak: 'break-all' } }, params.row.snType)
+                    ])
+                  }
+                },
+                {
+                  title: this.$t('state'),
+                  key: 'resState',
+                  ellipsis: true,
+                  render: (h, params) => {
+                    return h('Tooltip', {
+                      props: { placement: 'top-start' },
+                      style:{
+                        color:params.row.resState==this.$t('used')?'#19be6b':'#515a6e'
+                      }
+                    }, [
+                      params.row.resState,
+                      h('span', { slot: 'content', style: { whiteSpace: 'normal', wordBreak: 'break-all' } }, params.row.resState)
+                    ])
+                  }
+                },
+                {
+                  title: this.$t('company'),
+                  key: 'agentCompanyName',
+                  ellipsis: true,
+                  render: (h, params) => {
+                    return h('Tooltip', {
+                      props: { placement: 'top-start' }
+                    }, [
+                      params.row.agentCompanyName,
+                      h('span', { slot: 'content', style: { whiteSpace: 'normal', wordBreak: 'break-all' } }, params.row.agentCompanyName)
+                    ])
+                  }
+                },
+              
+    
+            ],
+            page:{
+                total:0,
+                current:1,
+                size:10
+            },
+            selection:[],
+            selectionUid:[],
+            batchImportContent:'',
+            tabName:'name1',
+            successCount:0,
+            errorCount:0,
+            successList:(h) => {
+                return h('div', [
+                    h('span', this.$t('user_table_import_success_list')),
+                    h('Badge', {
+                        props: {
+                            count: this.successCount
+                        },
+                        style:{
+                            'margin-left':'5px',
+                        }
+
+                    })
+                ])
+            },
+            errorList:(h) => {
+                return h('div', [
+                    h('span', this.$t('user_table_import_falied_list')),
+                    h('Badge', {
+                        props: {
+                            count: this.errorCount
+                        },
+                        style:{
+                            'margin-left':'5px',
+                        }
+                    })
+                ])
+            },
+            importSuccessColumns:[
+                {
+                    type: 'index',
+                    width: 60,
+                    align: 'center'
+                },
+                {
+                    title: this.$t('SN'),
+                    key: 'sn'
+                },
+                {
+                    title: this.$t('alarmType'),
+                    key: 'snType'
+                }
+            ],
+            importSuccessData:[],
+            importFailurecolumns:[
+                {
+                    type: 'index',
+                    width: 60,
+                    align: 'center'
+                },
+                {
+                    title: this.$t('SN'),
+                    key: 'sn'
+                },
+                {
+                    title: this.$t('alarmType'),
+                    key: 'snType'
+                },
+                {
+                    title: this.$t('ERRS'),
+                    key: 'ext1'
+                },
+            ],
+            importFailureData:[],
+            uploadTableDataContent:[],
+            assignAgentId:'',
+            agentList:[]
+    	}
+    },
+
+
+    methods:{
+        changeIsAllSN(){
+            this.page.current=1
+            this.getSnResources()
+        },
+        getSnResources(){
+            let _this = this
+            let param = {
+                page:this.page.current,
+                rows:this.page.size,
+                sn:this.searchMes.sn,
+                snType:this.searchMes.snType,
+                resState:this.searchMes.resState==2?'':this.searchMes.resState
+            }
+            let url = ''
+            if(this.isAllSN){
+                url = 'agent/api/querySnResources'
+            }else{
+                url = 'agent/api/querySnResourcesByAgentId'
+                param.agentId = this.myAgentId
+            }
+            querySnResources(url,param).
+            then(res=>{
+                _this.page.total = res.data.count
+                _this.tableData = _this.turnData(res.data.data)
+                _this.selection = []
+            })
+        },
+        turnData(data){
+            let _this = this
+            data.forEach(function(item,index){
+                item.resState=item.resState==1?_this.$t('unused'):_this.$t('used')
+            })
+            return data
+        },
+        changePage(current){
+            this.page.current = current
+            this.getSnResources()
+        },
+        changePageSize(current){
+            this.page.size = current
+            this.getSnResources()
+        },
+        tableSelection (selection) {
+            let _this = this
+            this.newQuery = false
+            this.selection = selection
+            
+            this.selection.forEach(function(item){
+                item.resState=item.resState==_this.$t('used')?0:1
+            })
+        },
+        batchImportModal(){
+            this.modal11 = true
+            this.batchImportContent=''
+            this.$refs.uploadExcel.initUpload()
+        },
+        uploadTableData(data){
+            let tableData=[]
+            data.forEach(function(item){
+                let obj={}
+                if(item.SN){
+                    obj.sn = item.SN
+                }
+                if(item['SN Type']){
+                    obj.snType = item['SN Type']
+                }
+                tableData.push(obj)
+            })
+            this.uploadTableDataContent = tableData
+        },
+        sendBatchImport(){
+            let _this = this
+            if(this.uploadTableDataContent.length==0){
+                this.$Message.error(this.$t('user_table_import_Content_error'))
+                return
+            }
+            batchCheckSN({'snResources':this.uploadTableDataContent})
+            .then(function(res){
+                // console.log(res)
+                if(res.data.code==0){
+                    _this.modal11 = false
+                    _this.modal12 = true
+                    _this.turnDate(res.data.data.errorUsers)
+                    _this.turnDate(res.data.data.successUsers)
+                    _this.errorCount = res.data.data.errorUsers.length
+                    _this.importFailureData = res.data.data.errorUsers
+                    _this.successCount = res.data.data.successUsers.length
+                    _this.importSuccessData = res.data.data.successUsers
+                }
+            })
+        },
+        turnDate(arr){
+            for(let i=0;i<arr.length;i++){
+                if(arr[i].ext1) arr[i].ext1 = this.$t(arr[i].ext1)
+            }
+        },
+        batchSaveEdposUser(){
+            const _this = this
+            if(this.successCount==0){
+                this.$Message.error(this.$t('user_table_import_Content_error'))
+                return
+            }
+            batchSaveSN(this.importSuccessData)
+            .then(function(res){
+                if(res.data.code==0){
+                    _this.$Message.success(_this.$t('user_table_import_success_list'))
+                    _this.modal12=false
+                    _this.getSnResources()
+                }
+            })
+        },
+        tabChange(name){
+            if(this.tabName==name){return}
+            if(this.tabName=='name1'){
+                this.tabName='name2'
+            }else{
+                this.tabName='name1'
+            }
+        },
+        search(){
+            this.page.current = 1
+            this.getSnResources()
+        },
+        getAgentList(){
+            let _this = this
+            queryAgentCompany()
+            .then((res)=>{
+                if(res.data.code==0){
+                    res.data.data.forEach(function(item){
+                        let obj = {
+                            value:item.agentId,
+                            label:item.companyName+'【'+item.account+'】'
+                        }
+                        _this.agentList.push(obj)
+                    })
+                }
+                
+            })
+        },
+        assign(){
+            
+            if (this.selection.length == 0) {
+                this.$Message.warning(this.$t('user_table_select_warning'))
+            } else {
+                this.modal1 = true
+            }
+        },
+        sendAssign(){
+            let _this = this
+            let param = {
+                agentId:this.assignAgentId,
+                snResources:this.selection
+            }
+            assignSN(param).
+            then((res)=>{
+                if(res.data.code==0){
+                    _this.$Message.success(_this.$t('assignSuccess'))
+                    _this.getSnResources()
+                    _this.modal2 = false
+
+                }
+            })
+        },
+
+    },
+    computed:{
+        batchImport: function () {
+          return this.$t('user_table_btn_batchImport')
+        },
+        user_table_batchImportContent:function () {
+          return this.$t('user_table_batchImportContent')
+        },
+        Result:function () {
+          return this.$t('Result')
+        },
+        Assign:function () {
+          return this.$t('assign')
+        },
+    },
+}
+</script>
+

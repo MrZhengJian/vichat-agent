@@ -1,0 +1,98 @@
+.agent_account{
+	position: relative;
+	height: 100%;
+	.title{
+		// font-weight: bold;
+		font-size:24px;
+		padding:16px;
+		border-radius:4px;
+		box-shadow: 1px 1px 2px 3px rgba(100, 100, 100, 0.1);
+	}
+	.main{
+		position: absolute;
+		top: 95px;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		.btns{
+			margin-bottom: 5px;
+		    position: absolute;
+		    top:0;
+		    left:0;
+		    width: 100%;
+		    height:40px;
+		    z-index:100;
+		    overflow: hidden;
+		    .ivu-btn{
+		    	float: right;
+		    	margin-left: 5px;
+		    	height: 32px;
+		    }
+		}
+		.table{
+			position: absolute;
+		    bottom:50px;
+		    left:0;
+		    top:50px;
+		    overflow-y: auto;
+		    z-index:99;
+		    width: 100%;
+		}
+		.page{
+			position: absolute;
+		    bottom:0;
+		    right:0;
+		    width: 100%;
+		    height:40px;
+		    z-index:100;
+		    margin:10px;
+		    margin-bottom: 0;
+		}
+	}
+}
+.agent_importResult{
+    .ivu-modal{
+        width: 80% !important;
+        height: 80%;
+        .ivu-modal-content{
+            width: 100%;
+            height: 100%;
+            .ivu-modal-footer{
+                position: absolute;
+                bottom: 0;
+                right: 0;
+                left: 0;
+            }
+            .ivu-modal-body{
+                position: absolute;
+                top:51px;
+                bottom: 60px;
+                right: 0;
+                left: 0;
+                .ivu-tabs{
+                  position: absolute;
+                  top: 17px;
+                  left: 17px;
+                  bottom: 0;
+                  right: 17px;
+                  .ivu-tabs-content{
+                    position: absolute;
+                    top: 50px;
+                    left: 0;
+                    bottom: 0;
+                    right: 0;
+                    .ivu-tabs-tabpane{
+                        overflow: auto;
+                    }
+                  }
+                }
+            }
+        }
+    }
+    .ivu-badge-count{
+        background: #5cadff;
+    }
+    .ivu-tabs.ivu-tabs-card>.ivu-tabs-bar .ivu-tabs-tab{
+        padding:5px 8px 5px 16px;
+    }
+}

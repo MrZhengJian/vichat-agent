@@ -298,7 +298,7 @@ export default {
       channelForm: {
         rid: null,
         name: '',
-        style: -1,
+        style: 1,
         pttCtrl: 1,
         capacity: 1000
       },
@@ -309,7 +309,7 @@ export default {
       ],
       channelTypeList1: [
         {desc: this.$t('Type_StyleId1'), value: 1},
-        {desc: this.$t('Type_StyleId3'), value: 3},
+        {desc: this.$t('Type_StyleId3'), value: 3}
       ],
       pttCtrlList: [],
       expireTypeList: [],
@@ -529,7 +529,7 @@ export default {
       this.channelForm = {
         rid: null,
         name: '',
-        style: -1,
+        style: 1,
         pttCtrl: 1,
         capacity: 1000
       }

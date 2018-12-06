@@ -40,6 +40,16 @@ export default [
           notCache: true,
         },
         component: () => import('@/view/single-page/home/home.vue')
+      },
+      {
+        path: '/Expiring',
+        name: 'Expiring',
+        meta: {
+          hideInMenu: true,
+          title: i18n.t('home'),
+          notCache: true,
+        },
+        component: () => import('@/view/single-page/home/home_details.vue')
       }
     ]
   },
@@ -79,7 +89,7 @@ export default [
     name: 'management',
     component: Main,
     meta: {
-      title: i18n.t('agent'),
+      title: i18n.t('Enterprise_management'),
     },
     children: [ 
         {
@@ -139,7 +149,7 @@ export default [
     name: 'Amanagement',
     component: Main,
     meta: {
-      title: i18n.t('agent'),
+      title: i18n.t('Amanagement'),
     },
     children: [ 
         {
@@ -148,7 +158,7 @@ export default [
             meta: {
               hideInMenu: false,
               icon: 'md-contacts',
-              title: i18n.t('Agent_management'),
+              title: i18n.t('Amanagement'),
             },   
             component: () => import('@/view/Agent-management/Agent-management.vue')
         }
@@ -169,7 +179,7 @@ export default [
     name: 'SN',
     component: Main,
     meta: {
-      title: i18n.t('agent'),
+      title: i18n.t('SN_management'),
     },
     children: [
       {
@@ -178,9 +188,30 @@ export default [
         meta: {
           title: i18n.t('SN_management'),
           hideInMenu: false,
-          icon: 'md-contacts'
+          icon: 'md-flag'
         },
         component: () => import('@/view/SN-management/SN-management.vue')
+      }
+    ]
+  },
+  {
+    path: '_details_management',
+    name: '_details_management',
+    component: Main,
+    meta: {
+      icon: 'md-contacts',
+      title: i18n.t('details_management'),
+    },
+    children: [
+      {
+        path: '/agent_charge',
+        name: 'agent_charge',
+        meta: {
+          title: i18n.t('details_management'),
+          hideInMenu: false,
+          icon: 'md-list'
+        },
+        component: () => import('@/view/details-management/agent-charge/agent-charge.vue')
       }
     ]
   },

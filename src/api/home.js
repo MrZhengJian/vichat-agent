@@ -7,18 +7,10 @@ export const getCounts = (params) => {
     method: 'get'
   })
 }
-
-export const logDetails = (params) => {
+export const getExpiringUsers = (params) => {
   return axios.request({
-    url: 'vcapi/queryOnlineUserDetailByPage',
+    url: '/agent/api/getExpiringUsers',
     method: 'get',
     params
-  })
-}
-
-export const chartData = (url) => {
-  return axios.request({
-    url: url,
-    method: 'get',
   })
 }

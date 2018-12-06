@@ -11,6 +11,7 @@ export default {
     access: '',
     userObj:{},
     funcObj:{},
+    CompanyObj:{},
     sysStaticData:{},
     record:null
   },

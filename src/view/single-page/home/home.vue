@@ -53,7 +53,7 @@
             </Row>
             <Row>
                 <Col :span='10'>{{$t('expiringUserNum')}}</Col>
-                <Col :span='14'>{{count.expiringUserNum}}</Col>
+                <Col :span='14'>{{count.expiringUserNum}} <a @click="toDetails" style="margin-left:20px;">{{$t('channel_col_view')}}</a></Col>
             </Row>
         </Card>
     </div>
@@ -101,6 +101,14 @@ export default {
                     _this.count = res.data.obj
                 }
             })
+        },
+        toDetails(){
+            this.$router.push({
+                name:'Expiring',
+                params:{ 
+                    
+                }
+            });
         }
     }
 };

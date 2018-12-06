@@ -31,12 +31,12 @@
         </Card>
         <div class="content">
             <div class="btns">
-                <Select v-model="isAllSN" @on-change="changeIsAllSN" style="width:100px">
+                <!-- <Select v-model="isAllSN" @on-change="changeIsAllSN" style="width:100px">
                     <Option :value="1" :key="1">{{ $t('allSN') }}</Option>
                     <Option :value="0" :key="0">{{ $t('mySN') }}</Option>
-                </Select>
+                </Select> -->
                 <!-- <Button v-if="!isAllSN" type="primary" @click="batchImportModal">{{$t('account_import')}}</Button> -->
-                <Button v-if="!isAllSN" type="primary" @click="assign">{{$t('assign')}}</Button>
+                <Button type="primary" @click="assign">{{$t('assign')}}</Button>
             </div>
             <div class="tableBox">
                 <Table @on-selection-change="tableSelection" ref="selection" :columns="tableColums" :data="tableData"></Table>
@@ -122,7 +122,7 @@
             class='AssginSN'
             >
            
-            <h1 style="text-align:center;margin:10px;">{{$t('confirmAssign')}}</h1>
+            <h1 style="text-align:center;margin:10px;">{{confirmAssign}}</h1>
             <div slot="footer">
                 <Button  type="default" size="large" @click="modal1=false">
                     {{$t('cancel')}}
@@ -150,7 +150,9 @@ export default {
     },
     data () {
     	return{
+            confirmAssign:this.$t('confirmAssign'),
             myAgentId:this.$store.state.user.userObj.agentId,
+            myAgentName:this.$store.state.user.userObj.agentId,
             isAllSN:1,
             modal1: false, // 
             modal2: false, // 
@@ -335,13 +337,14 @@ export default {
                 snType:this.searchMes.snType,
                 resState:this.searchMes.resState==2?'':this.searchMes.resState
             }
-            let url = ''
-            if(this.isAllSN){
-                url = 'agent/api/querySnResources'
-            }else{
-                url = 'agent/api/querySnResourcesByAgentId'
-                param.agentId = this.myAgentId
-            }
+            let url = 'agent/api/querySnResourcesByAgentId'
+            param.agentId = this.myAgentId
+            // if(this.isAllSN){
+            //     url = 'agent/api/querySnResources'
+            // }else{
+            //     url = 'agent/api/querySnResourcesByAgentId'
+            //     param.agentId = this.myAgentId
+            // }
             querySnResources(url,param).
             then(res=>{
                 _this.page.total = res.data.count
@@ -462,7 +465,16 @@ export default {
             })
         },
         assign(){
-            
+            let _this=this
+            let used = false
+            this.selection.forEach(function(item){
+                if(item.resState==0){
+                    _this.$Message.error( _this.$t('usedError'))
+                    used = true
+                    return
+                }
+            })
+            if(used){return}
             if (this.selection.length == 0) {
                 this.$Message.warning(this.$t('user_table_select_warning'))
             } else {

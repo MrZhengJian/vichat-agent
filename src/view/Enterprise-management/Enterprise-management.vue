@@ -52,7 +52,7 @@
                 <FormItem :label="confirm_password" prop="repassword">
                     <Input type="password" v-model='form.repassword' :maxlength='16' :minlength='6' :placeholder="register_repeat_pwd_placeholder" style="width:300px;"></Input>
                 </FormItem>
-                <FormItem :label="user_name" prop="companyName">
+                <FormItem :label="user_name" prop="userName">
                     <Input type="text" v-model='form.userName' :maxlength='20' :placeholder="login_user_placeholder" style="width:300px;"></Input>
                 </FormItem>
                 <FormItem :label="contacts" prop="userName">
@@ -453,7 +453,7 @@ export default {
                     saveCompany(this.modifyObj)
                     .then(res=>{
                         if(res.data.code == 0){
-                            _this.$Message.success('user_table_modify_ok')
+                            _this.$Message.success(_this.$t('user_table_modify_ok'))
                             _this.queryEdposCompany()
                             _this.modal4 = false
                         }

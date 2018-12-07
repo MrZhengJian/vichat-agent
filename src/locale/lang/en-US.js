@@ -1,5 +1,8 @@
 export default {
+	current_page:'Current Page',
+	selected_item:'Selected',
 	details_management:'Recharge Details',
+	_details_management:'Recharge Details',
 	agent_charge:'Agent Recharge',
 	company_charge:'Company Recharge',
 	beforeBalance:'Before(M)',
@@ -29,6 +32,7 @@ export default {
 	account_pwd :'Password',
 	account_add:'Add',
 	account_role :'Role',
+	account_del :'Delete',
 	role_add :'Add',
 	role_edit :'Edit',
 	role_assign:'Assign',
@@ -585,6 +589,7 @@ export default {
 	'00007000001':'Record not exist',
 	'00008000001':'SN is exist',
 	'00008000002':'SN not exist',
+	'0000100019': 'Please delete the valid users under this enterprise first',
 	'IE_alert': 'If the page cannot be displayed properly, use extreme speed mode or Google browser.'
 
 }

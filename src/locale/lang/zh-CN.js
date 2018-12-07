@@ -1,5 +1,8 @@
 export default {
+	current_page:'当前页',
+	selected_item:'所选项',
 	details_management:'充值明细',
+	_details_management:'充值明细',
 	agent_charge:'代理商充值',
 	company_charge:'企业充值',
 	beforeBalance:'操作前余额(月)',
@@ -29,6 +32,7 @@ export default {
 	account_pwd :'密码',
 	account_add:'添加',
 	account_role :'角色',
+	account_del :'删除',
 	role_add :'添加',
 	role_edit :'编辑',
 	role_assign:'分配菜单',
@@ -581,5 +585,6 @@ export default {
 	'00007000001':'流水不存在',
 	'00008000001':'SN 已存在',
 	'00008000002':'SN 不存在',
+	'0000100019': '请先删除该企业下的有效用户',
 	'IE_alert': '如果网页无法正常显示，请使用极速模式或谷歌浏览器'
 }

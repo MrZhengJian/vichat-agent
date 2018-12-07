@@ -123,12 +123,26 @@
                 <Button type="primary" size="large" @click="sendRoleAssign">{{$t('ok')}}</Button>
             </div>
         </Modal>
+        <!-- 行内删除提示 -->
+        <Modal :title="modal3_title" v-model="modal13">
+            <p style="margin:20px 0;text-align:center;font-size:20px">
+                {{$t('user_table_modal7_content')}}
+            </p>
+            <div slot="footer">
+                <Button type="default" size="large" @click="modal13=false">
+                    {{$t('cancel')}}
+                </Button>
+                <Button type="primary" size="large" @click="confirmDeletion">
+                    {{$t('ok')}}
+                </Button>
+            </div>
+        </Modal>
+
     </div>
-    
-</template>
+    </template>
 
 <script type="ecmascript-6">
-import { queryAgentUser,batchSaveAgentUsers,batchCheckAgentUsers,chgAgentPassword,saveAgentUser} from '@/api/agent'
+import { queryAgentUser,batchSaveAgentUsers,batchCheckAgentUsers,chgAgentPassword,saveAgentUser,deleteAgentUser} from '@/api/agent'
 import { getSession } from '@/api/user'
 import { dateFormat } from '@/libs/tools'
 import { getSecRoleByUid,batchUpdateUserRole } from '@/api/user-manage'
@@ -184,13 +198,14 @@ export default {
             }
         };
         return {
-          accessList:{
-            "account_role":this.$store.state.user.funcObj.account_role||false,
-            "account_pwd":this.$store.state.user.funcObj.account_pwd||false,
-            "account_edit":this.$store.state.user.funcObj.account_edit||false,
-            "account_import":this.$store.state.user.funcObj.account_import||false,
-            "account_add":this.$store.state.user.funcObj.account_add||false
-          },
+            accessList:{
+              "account_role":this.$store.state.user.funcObj.account_role||false,
+              "account_pwd":this.$store.state.user.funcObj.account_pwd||false,
+              "account_edit":this.$store.state.user.funcObj.account_edit||false,
+              "account_import":this.$store.state.user.funcObj.account_import||false,
+              "account_add":this.$store.state.user.funcObj.account_add||false,
+              "account_del":this.$store.state.user.funcObj.account_del||false
+            },
             agentId:this.$store.state.user.userObj.agentId,
             searchTxt:'',
             total:0,
@@ -338,7 +353,26 @@ export default {
                             size: 'small',
                             disabled:(params.row.userType==this.$t('employee_type_List2')?true:false)
                           }
-                        }, this.$t('user_table_col_role_assign'))
+                        }, this.$t('user_table_col_role_assign')),
+                      h('Button',
+                        {
+                          on: {
+                            click: () => {
+                                this.delIndex = params.index
+                                this.modal13=true
+                            }
+                          },
+                          style: {
+                            display: this.accessList.account_del?'inline-block':'none',
+                            color: (params.row.userType==this.$t('employee_type_List2')?'#ccc':'#F25E43'),
+                            cursor: 'pointer'
+                          },
+                          props: {
+                            type: 'text',
+                            size: 'small',
+                            disabled:(params.row.userType==this.$t('employee_type_List2')?true:false)
+                          }
+                        }, this.$t('user_table_col_delete'))
                     ])
                   }
                 }
@@ -349,6 +383,8 @@ export default {
             modal8:false,
             modal11:false,
             modal12:false,
+            modal13:false,
+            delIndex:'',
             empMes:{
                 agentId:this.$route.params.agentId || localStorage.getItem('agentId'),
                 account:'',
@@ -587,8 +623,20 @@ export default {
             }
 
             this.empMes.sex = sex
-            console.log(this.empMes.sex)
+            // console.log(this.empMes.sex)
             this.modal2 = true
+        },
+        confirmDeletion(){
+            let _this = this
+            // console.log(this.tableData[this.delIndex])
+            deleteAgentUser({agentUid:this.tableData[this.delIndex].agentUid})
+            .then(res=>{
+                if(res.data.code==0){
+                    _this.$Message.success(_this.$t('user_table_delete_ok'))
+                    _this._getMes()
+                    _this.modal13 = false
+                }
+            })
         },
         batchImportModal(){
             this.modal11 = true
@@ -716,7 +764,10 @@ export default {
         }
     },
     computed:{
-       batchImport: function () {
+        modal3_title: function () {
+          return this.$t('user_table_modal3_title')
+        },
+        batchImport: function () {
           return this.$t('user_table_btn_batchImport')
         },
         user_table_batchImportContent:function () {

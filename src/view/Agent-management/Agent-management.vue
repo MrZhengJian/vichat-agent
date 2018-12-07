@@ -1,6 +1,6 @@
 <template>
     <div class="Enterprise_management">
-    	<Card class="searchCard" :bordered="false">
+    	<Card class="searchCard" >
 
             <div style="overflow:hidden">
             	<div class="searchBox">

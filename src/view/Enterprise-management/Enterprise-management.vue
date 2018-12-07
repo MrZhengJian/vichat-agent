@@ -1,6 +1,6 @@
 <template>
     <div class="Enterprise_management">
-    	<Card class="searchCard" :bordered="false">
+    	<Card class="searchCard" >
             <div style="overflow:hidden">
             	<div class="searchBox">
             		<span>{{$t('name')}}：</span> 
@@ -77,7 +77,7 @@
                 <FormItem :label="register_firm_account_label" prop="terminal">
                     <Input disabled type="text" v-model="form.terminal" :maxlength='20' :placeholder="register_firm_account_placeholder" style="width:300px;"></Input>
                 </FormItem>
-                <FormItem :label="contacts" prop="companyName">
+                <FormItem :label="contacts" prop="userName">
                     <Input type="text" v-model='form.userName' :maxlength='20' :placeholder="login_user_placeholder" style="width:300px;"></Input>
                 </FormItem>
                 
@@ -90,13 +90,26 @@
                 <Button type="primary" size="large" @click="saveModify">{{$t('ok')}}</Button>
             </div>
         </Modal>
-      
+        <!-- 行内删除提示 -->
+        <Modal :title="modal3_title" v-model="modal13">
+            <p style="margin:20px 0;text-align:center;font-size:20px">
+                {{$t('user_table_modal7_content')}}
+            </p>
+            <div slot="footer">
+                <Button type="default" size="large" @click="modal13=false">
+                    {{$t('cancel')}}
+                </Button>
+                <Button type="primary" size="large" @click="confirmDeletion">
+                    {{$t('ok')}}
+                </Button>
+            </div>
+        </Modal>
     </div>
     
 </template>
 
 <script type="ecmascript-6">
-import { queryCompany,batchUpdateCompanyExpiredDate,saveCompany } from '@/api/agent'
+import { queryCompany,batchUpdateCompanyExpiredDate,saveCompany,deleteCompany } from '@/api/agent'
 import { registerCompany } from '@/api/register'
 import {dateFormat} from '@/libs/tools'
 import { mapMutations } from 'vuex'
@@ -161,13 +174,15 @@ export default {
                 "company_org":this.$store.state.user.funcObj.company_org||false,
                 "company_account":this.$store.state.user.funcObj.company_account||false,
                 "company_edit":this.$store.state.user.funcObj.company_edit||false,
-                "company_add":this.$store.state.user.funcObj.company_add||false
+                "company_add":this.$store.state.user.funcObj.company_add||false,
+                "company_del":this.$store.state.user.funcObj.company_del||false
             },
             newQuery:false,
             modal1:false,
             modal2:false,
             modal3:false,
-        	modal4:false,
+            modal4:false,
+        	modal13:false,
             selectionUid:[],
             selection:[],
         	searchMes:{
@@ -269,11 +284,31 @@ export default {
                                         type: 'text',
                                         size: 'small'
                                     } 
-                                },this.$t('rec_tab_label1'))
+                                },this.$t('rec_tab_label1')),
+                            h('Button', 
+                                {
+                                    on: {
+                                        click: () => {
+                                            this.partyId = params.row.partyId
+                                            this.modal13=true
+                                        }
+                                    },
+                                    style:{
+                                        display:this.accessList.company_del?'inline-block':'none',
+                                        color:'#F25E43',
+                                        cursor:'pointer'
+                                    },
+                                    props: {
+                                        type: 'text',
+                                        size: 'small'
+                                    } 
+                                },this.$t('user_table_col_delete')),
+
                         ]);
                     }
                 }
             ],
+            partyId:'',
             page:{
                 total:0,
                 current:1,
@@ -463,6 +498,18 @@ export default {
             })
             
         },
+        confirmDeletion(){
+            let _this = this
+            // console.log(this.tableData[this.delIndex])
+            deleteCompany({partyId:this.partyId})
+            .then(res=>{
+                if(res.data.code==0){
+                    _this.$Message.success(_this.$t('user_table_delete_ok'))
+                    _this.queryEdposCompany()
+                    _this.modal13 = false
+                }
+            })
+        },
         clear(){
             this.form={
                 terminal:'',
@@ -476,6 +523,9 @@ export default {
         }
     },
     computed:{
+        modal3_title: function () {
+          return this.$t('user_table_modal3_title')
+        },
         register_firm_name_placeholder: function () {
           return this.$t('register_firm_name_placeholder')
         },

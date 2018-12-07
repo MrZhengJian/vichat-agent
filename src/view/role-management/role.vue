@@ -323,6 +323,12 @@ export default {
           _this.menuList.push(element.id+'')
 
       });
+      if(_this.menuList.indexOf('9')>-1||_this.menuList.indexOf('10')>-1){
+          _this.menuList.push('1')
+      }
+      if(_this.menuList.indexOf('17')){
+          _this.menuList.push('2')
+      }
     },
     
     sendTree(){

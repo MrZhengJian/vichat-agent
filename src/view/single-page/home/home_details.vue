@@ -127,7 +127,7 @@ export default {
                   }
                 },
                 {
-                  title: this.$t('user_table_col_userName'),
+                  title: this.$t('company'),
                   key: 'companyName',
                   render: (h, params) => {
                     return h('Tooltip', {

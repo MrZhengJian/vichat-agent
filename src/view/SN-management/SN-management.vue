@@ -27,6 +27,10 @@
                 <div class="searchBox">
                     <Button type="primary" @click='search'>&nbsp;&nbsp;{{$t('search')}}&nbsp;&nbsp;</Button>
                 </div>
+                <div class="searchBox" style="float:right">
+                    <Button type="primary" @click="assign">{{$t('assign')}}</Button>
+                </div>
+                
             </div>
         </Card>
         <div class="content">
@@ -36,7 +40,7 @@
                     <Option :value="0" :key="0">{{ $t('mySN') }}</Option>
                 </Select> -->
                 <!-- <Button v-if="!isAllSN" type="primary" @click="batchImportModal">{{$t('account_import')}}</Button> -->
-                <Button type="primary" @click="assign">{{$t('assign')}}</Button>
+                
             </div>
             <div class="tableBox">
                 <Table @on-selection-change="tableSelection" ref="selection" :columns="tableColums" :data="tableData"></Table>

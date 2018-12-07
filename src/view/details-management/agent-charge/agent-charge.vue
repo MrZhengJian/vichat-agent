@@ -24,7 +24,7 @@
                     </div>
                 </div>
                 
-                <div class="moreSearch">
+                <div class="search_item">
                     <Button type='primary' @click="search">{{$t('search')}}</Button>
                 </div>
             </div>

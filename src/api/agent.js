@@ -32,7 +32,14 @@ export const registerCompany = (params) => {
     data:params
   })
 }
-
+deleteCompany
+export const deleteCompany = (params) => {
+  return axios.request({
+    url: '/agent/api/deleteCompany',
+    method: 'get',
+    params
+  })
+}
 export const batchUpdateCompanyExpiredDate = (params) => {
   return axios.request({
     url: '/agent/api/batchUpdateCompanyExpiredDate',
@@ -108,6 +115,14 @@ export const chgAgentPassword = (params) => {
 export const saveAgentUser = (params) => {
   return axios.request({
     url: '/agent/api/saveAgentUser',
+    method: 'get',
+    params
+  })
+}
+
+export const deleteAgentUser = (params) => {
+  return axios.request({
+    url: '/agent/api/deleteAgentUser',
     method: 'get',
     params
   })

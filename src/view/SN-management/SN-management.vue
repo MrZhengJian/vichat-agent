@@ -1,5 +1,5 @@
 <script type="text/javascript">
-  /* eslint-disable */
+/* eslint-disable */
 </script>
 <style rel="stylesheet" lang="less">
     @import "../../styles/common.less";
@@ -12,15 +12,15 @@
             <div style="overflow:hidden">
                 <div class="searchBox">
                     <span>{{$t('SN')}}：</span> 
-                    <Input v-model="searchMes.sn" clearable  type="text"  style="width:200px"/>
+                    <Input v-model="searchMes.sn" clearable  type="text"  style="width:180px"/>
                 </div>
                 <div class="searchBox">
                     <span>{{$t('alarmType')}}：</span>
-                    <Input v-model="searchMes.snType" clearable type="text"  style="width:200px"/>
+                    <Input v-model="searchMes.snType" clearable type="text"  style="width:180px"/>
                 </div>
                 <div class="searchBox">
                     <span>{{$t('state')}}：</span>
-                    <Select v-model="searchMes.resState" style="width:200px">
+                    <Select v-model="searchMes.resState" style="width:100px">
                         <Option v-for="item in stateList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                     </Select>
                 </div>
@@ -449,6 +449,7 @@ export default {
             }
         },
         search(){
+            this.$refs.page.currentPage=1
             this.page.current = 1
             this.getSnResources()
         },

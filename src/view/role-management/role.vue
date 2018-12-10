@@ -115,6 +115,7 @@ export default {
   },
   data () {
     const validateAccount = (rule, value, callback) => {
+      value = value.trim()
         if (value === '') {
             callback(new Error(this.$t('role_name_placeholder')));
         } else if (value.length>20) {
@@ -124,6 +125,7 @@ export default {
         }
     };
     const validateDesc = (rule, value, callback) => {
+      value = value.trim()
         if (value === '') {
             callback(new Error(this.$t('role_desc_placeholder')));
         } else if (value.length>20) {

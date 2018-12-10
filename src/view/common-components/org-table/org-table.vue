@@ -86,6 +86,7 @@ export default {
   
   data () {
     const validateAccount = (rule, value, callback) => {
+      value = value.trim()
         if (value === '') {
             callback(new Error(this.$t('org_table_modify_error1')));
         } else if (value.length>20) {

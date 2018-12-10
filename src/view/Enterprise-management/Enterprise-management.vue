@@ -219,7 +219,7 @@ export default {
           key: 'action',
           align: 'center',
           fixed: 'right',
-          width: 300,
+          width: 320,
           render: (h, params) => {
             return h('div', [
               h('Button',

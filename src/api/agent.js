@@ -79,6 +79,14 @@ export const saveAgentCompany = (params) => {
   })
 }
 
+export const deleteAgentCompany = (params) => {
+  return axios.request({
+    url: '/agent/api/deleteAgentCompany',
+    method: 'get',
+    params
+  })
+}
+
 // AGENT USERS
 export const queryAgentUser = (params) => {
   return axios.request({
@@ -123,6 +131,14 @@ export const saveAgentUser = (params) => {
 export const deleteAgentUser = (params) => {
   return axios.request({
     url: '/agent/api/deleteAgentUser',
+    method: 'get',
+    params
+  })
+}
+
+export const queryAgentCompanyShort = (params) => {
+  return axios.request({
+    url: '/agent/api/queryAgentCompanyShort',
     method: 'get',
     params
   })

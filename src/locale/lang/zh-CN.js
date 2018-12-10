@@ -1,4 +1,6 @@
 export default {
+  member:'成员',
+  user_table_import_agentId_error:'请选择代理商',
   current_page: '当前页',
   selected_item: '所选项',
   details_management: '充值明细',
@@ -574,6 +576,7 @@ export default {
   '0000400005': '组织不唯一',
   '0000500001': '代理商不存在',
   '0000500002': '余额不足',
+  '0000500004': '请先删除该代理商下的有效的子代理商或企业',
   '0000100016': '账号不能为空',
   '0000100017': 'ICCID不能为空',
   '0000100018': 'SN 不能为空',

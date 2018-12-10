@@ -99,25 +99,8 @@ export default {
         this.uploadLoading = false
         this.tableLoading = false
         this.showRemoveFile = true
-        let myTableData=[]
-        for(let i=0;i<this.tableData.length;i++){
-          let obj = {
-            terminal:this.tableData[i].Account,
-            orgName:this.tableData[i].OrgName,
-            userName:this.tableData[i].UserName
-          }
-          if(this.tableData[i].Phone){
-            obj.phone = this.tableData[i].Phone
-          }
-          if(this.tableData[i].SN){
-            obj.imei = this.tableData[i].SN
-          }
-          if(this.tableData[i].ICCID){
-            obj.iccid = this.tableData[i].ICCID
-          }
-          myTableData.push(obj)
-        }
-        this.$emit('uploadTableData',myTableData)
+        
+        this.$emit('uploadTableData',this.tableData)
       }
     }
   },

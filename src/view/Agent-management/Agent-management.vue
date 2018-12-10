@@ -129,13 +129,26 @@
                 <Button type="primary" size="large" @click="sendRenew">{{$t('ok')}}</Button>
             </div>
         </Modal>
-
+        <!-- 行内删除提示 -->
+        <Modal :title="modal3_title" v-model="modal13">
+            <p style="margin:20px 0;text-align:center;font-size:20px">
+                {{$t('user_table_modal7_content')}}
+            </p>
+            <div slot="footer">
+                <Button type="default" size="large" @click="modal13=false">
+                    {{$t('cancel')}}
+                </Button>
+                <Button type="primary" size="large" @click="confirmDeletion">
+                    {{$t('ok')}}
+                </Button>
+            </div>
+        </Modal>
     </div>
 
 </template>
 
 <script type="ecmascript-6">
-import { queryCompany, batchUpdateCompanyExpiredDate, queryAgentCompany, registerAgentCompany, batchUpdateAgentUsersExpiredDate, saveAgentCompany} from '@/api/agent'
+import { queryCompany, batchUpdateCompanyExpiredDate, queryAgentCompany, registerAgentCompany, batchUpdateAgentUsersExpiredDate, saveAgentCompany,deleteAgentCompany} from '@/api/agent'
 import { getSession} from '@/api/user'
 import {dateFormat} from '@/libs/tools'
 import { mapMutations } from 'vuex'
@@ -203,24 +216,27 @@ export default {
       accessList: {
         'child_agent_edit': this.$store.state.user.funcObj.child_agent_edit || false,
         'child_agent_recharge': this.$store.state.user.funcObj.child_agent_recharge || false,
-        'child_agent_add': this.$store.state.user.funcObj.child_agent_add || false
+        'child_agent_add': this.$store.state.user.funcObj.child_agent_add || false,
+        'child_agent_del': this.$store.state.user.funcObj.child_agent_del || false
       },
       parentId: this.$store.state.user.userObj.agentId,
+      agentId:'',
       newQuery: false,
       modal1: false,
       modal2: false,
       modal3: false,
-        	modal4: false,
+      modal4: false,
+      modal13:false,
       modifyParam: {},
       selectionUid: [],
       selection: [],
-        	searchMes: {
-        		companyName: '',
-        		account: ''
-        	},
-        	tableData: [],
-        	tableColums: [
-        		{
+    	searchMes: {
+    		companyName: '',
+    		account: ''
+    	},
+    	tableData: [],
+    	tableColums: [
+    		{
           title: this.$t('agent_name_label'),
           key: 'companyName'
         },
@@ -283,7 +299,26 @@ export default {
                     type: 'text',
                     size: 'small'
                   }
-                }, this.$t('channel_col_edit'))
+                }, this.$t('channel_col_edit')),
+              h('Button',
+                {
+                  on: {
+                    click: () => {
+                      // console.log(params)
+                      this.agentId = params.row.agentId
+                      this.modal13 = true
+                    }
+                  },
+                  style: {
+                    display: this.accessList.child_agent_del ? 'inline-block' : 'none',
+                    color: '#F25E43',
+                    cursor: 'pointer'
+                  },
+                  props: {
+                    type: 'text',
+                    size: 'small'
+                  }
+                }, this.$t('user_table_col_delete'))
               // h('Button',
               //     {
               //         on: {
@@ -341,7 +376,8 @@ export default {
       renewMax: 0,
       renew_form: {
         agentIds: '',
-        monthNumber: 1 },
+        monthNumber: 1 
+      },
       renewRule: {
         monthNumber: [
           {required: true, message: this.$t('renew_by_month_rule'), trigger: 'blur'}
@@ -527,9 +563,24 @@ export default {
           _this.modal2 = false
         }
       })
-    }
+    },
+    confirmDeletion () {
+      let _this = this
+      // console.log(this.tableData[this.delIndex])
+      deleteAgentCompany({agentId: this.agentId})
+        .then(res => {
+          if (res.data.code == 0) {
+            _this.$Message.success(_this.$t('user_table_delete_ok'))
+            _this.queryAgentCompany()
+            _this.modal13 = false
+          }
+        })
+    },
   },
   computed: {
+    modal3_title: function () {
+      return this.$t('user_table_modal3_title')
+    },
     renewPriceMax: function () {
       return parseInt(this.comRenewMax)
     },

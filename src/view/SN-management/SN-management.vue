@@ -28,7 +28,8 @@
                     <Button type="primary" @click='search'>&nbsp;&nbsp;{{$t('search')}}&nbsp;&nbsp;</Button>
                 </div>
                 <div class="searchBox" style="float:right">
-                    <Button type="primary" @click="assign">{{$t('assign')}}</Button>
+                    <Button type="primary" @click="batchImportModal">{{$t('account_import')}} {{$t('assign')}}</Button>
+                    <Button type="primary" @click="assign" style="margin-left:20px;">{{$t('assign')}}</Button>
                 </div>
                 
             </div>
@@ -63,8 +64,14 @@
             </div>
         </div>
         <!-- 批量导入 -->
-        <Modal :title="batchImport" v-model="modal11" :width="800">
-            <a class="example" href="./example.xlsx">{{$t('Example')}}</a>
+        <Modal :title="modal11Title" v-model="modal11" :width="800">
+            <div class="example1">
+                <span style="display:inline-block;text-align:right;">{{$t('agent')}}：</span>
+                <Select filterable v-model="assignAgentId" style="width:300px">
+                    <Option v-for="item in agentList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                </Select>
+            </div>
+            <a class="example" href="./example-SN.xlsx">{{$t('Example')}}</a>
             <upload-excel ref="uploadExcel" @uploadTableData="uploadTableData"></upload-excel>
             <div slot="footer">
                 <Button type="default" size="large" @click="modal11=false">
@@ -91,11 +98,8 @@
                 </TabPane>
             </Tabs>
             <div slot="footer">
-                <Button  type="default" size="large" @click="modal12=false">
-                    {{$t('cancel')}}
-                </Button>
-                <Button  v-if="tabName=='name1'" type="primary" size="large" @click="batchSaveEdposUser">
-                    {{$t('user_table_btn_batchImport')}}
+                <Button type="primary" size="large" @click="modal12=false">
+                    {{$t('close')}}
                 </Button>
             </div>
         </Modal>
@@ -131,7 +135,7 @@
                 <Button  type="default" size="large" @click="modal1=false">
                     {{$t('cancel')}}
                 </Button>
-                <Button type="primary" size="large" @click="sendAssign">
+                <Button type="primary" size="large" @click="sendAssign(selection)">
                     {{$t('ok')}}
                 </Button>
             </div>
@@ -143,7 +147,7 @@
 <script type="ecmascript-6">
 import { querySnResources,batchCheckSN,batchSaveSN,assignSN } from '@/api/sn'
 import uploadExcel from '@/view/excel/upload-excel'
-import { queryAgentCompany } from '@/api/agent'
+import { queryAgentCompany,queryAgentCompanyShort } from '@/api/agent'
 export default {
     components:{
         uploadExcel
@@ -156,7 +160,7 @@ export default {
     	return{
             confirmAssign:this.$t('confirmAssign'),
             myAgentId:this.$store.state.user.userObj.agentId,
-            myAgentName:this.$store.state.user.userObj.agentId,
+            myAgentName:this.$store.state.user.userObj.agentName,
             isAllSN:1,
             modal1: false, // 
             modal2: false, // 
@@ -322,7 +326,8 @@ export default {
             importFailureData:[],
             uploadTableDataContent:[],
             assignAgentId:'',
-            agentList:[]
+            agentList:[],
+            modal11Title:this.$t('assign')
     	}
     },
 
@@ -383,6 +388,8 @@ export default {
         batchImportModal(){
             this.modal11 = true
             this.batchImportContent=''
+            this.uploadTableDataContent=""
+            // this.assignAgentId=""
             this.$refs.uploadExcel.initUpload()
         },
         uploadTableData(data){
@@ -398,27 +405,20 @@ export default {
                 tableData.push(obj)
             })
             this.uploadTableDataContent = tableData
+            // console.log(tableData)
         },
         sendBatchImport(){
+
             let _this = this
             if(this.uploadTableDataContent.length==0){
                 this.$Message.error(this.$t('user_table_import_Content_error'))
                 return
             }
-            batchCheckSN({'snResources':this.uploadTableDataContent})
-            .then(function(res){
-                // console.log(res)
-                if(res.data.code==0){
-                    _this.modal11 = false
-                    _this.modal12 = true
-                    _this.turnDate(res.data.data.errorUsers)
-                    _this.turnDate(res.data.data.successUsers)
-                    _this.errorCount = res.data.data.errorUsers.length
-                    _this.importFailureData = res.data.data.errorUsers
-                    _this.successCount = res.data.data.successUsers.length
-                    _this.importSuccessData = res.data.data.successUsers
-                }
-            })
+            if(this.assignAgentId==''){
+                this.$Message.error(this.$t('user_table_import_agentId_error'))
+                return
+            }
+            this.sendAssign(this.uploadTableDataContent)
         },
         turnDate(arr){
             for(let i=0;i<arr.length;i++){
@@ -486,18 +486,28 @@ export default {
                 this.modal1 = true
             }
         },
-        sendAssign(){
+        sendAssign(data){
+            // console.log(data,this.assignAgentId)
             let _this = this
             let param = {
                 agentId:this.assignAgentId,
-                snResources:this.selection
+                snResources:data
             }
             assignSN(param).
             then((res)=>{
                 if(res.data.code==0){
-                    _this.$Message.success(_this.$t('assignSuccess'))
-                    _this.getSnResources()
+                    _this.modal11 = false
+                    _this.modal12 = true
+                    _this.turnDate(res.data.data.errorUsers)
+                    _this.turnDate(res.data.data.successUsers)
+                    _this.errorCount = res.data.data.errorUsers.length
+                    _this.importFailureData = res.data.data.errorUsers
+                    _this.successCount = res.data.data.successUsers.length
+                    _this.importSuccessData = res.data.data.successUsers
+                    // _this.$Message.success(_this.$t('assignSuccess'))
+                    // _this.getSnResources()
                     _this.modal2 = false
+                    _this.modal11 = false
 
                 }
             })

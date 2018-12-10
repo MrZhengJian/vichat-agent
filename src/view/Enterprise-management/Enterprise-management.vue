@@ -18,6 +18,7 @@
                 </div>
             </div>
         </Card>
+        
         <div class="tableBox">
 	        <Table stripe @on-selection-change="tableSelection" ref="selection" :columns="tableColums" :data="tableData"></Table>
 	    </div>

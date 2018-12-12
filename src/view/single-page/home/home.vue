@@ -81,10 +81,10 @@ export default {
             },
 
             logoText:localStorage.getItem('platformNameLong'),
-            userName:this.$store.state.user.userObj.userName,
+            userName:this.$store.state.user.userObj.userName || '  ',
             company:this.$store.state.user.CompanyObj.companyName,
             account:this.$store.state.user.userObj.account,
-            balance:this.$store.state.user.CompanyObj.authMonth
+            balance:this.$store.state.user.CompanyObj.authMonth || 0
         };
     },
     computed: {

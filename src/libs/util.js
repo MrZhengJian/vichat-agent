@@ -53,8 +53,8 @@ export const getMenuByRouter = (list, access) => {
  * @param {Array} routeMetched 当前路由metched
  * @returns {Array}
  */
-export const getBreadCrumbList = (routeMetched, homeRoute ,companyName) => {
-  if(companyName=='') companyName = localStorage.getItem('companyName')
+export const getBreadCrumbList = (routeMetched, homeRoute, companyName) => {
+  if (companyName == '') companyName = localStorage.getItem('companyName')
   let res = routeMetched.filter(item => {
     return item.meta === undefined || !item.meta.hide || item.meta.hide
   }).map(item => {
@@ -66,7 +66,7 @@ export const getBreadCrumbList = (routeMetched, homeRoute ,companyName) => {
     return obj
   })
   res = res.filter(item => {
-    return item.name!='_home' && item.name!='home'
+    return item.name != '_home' && item.name != 'home'
   })
   // res = res.filter(item => {
   //   return item.name!='_home' && item.name!='home'
@@ -84,7 +84,7 @@ export const getBreadCrumbList = (routeMetched, homeRoute ,companyName) => {
   //     i++
   //   }
   // }
-    
+
   return [Object.assign(homeRoute, { to: homeRoute.path }), ...res]
 }
 
@@ -94,13 +94,13 @@ export const showTitle = (item, vm) => vm.$config.useI18n ? vm.$t(item.name) : (
  * @description 本地存储和获取标签导航列表
  */
 export const setTagNavListInLocalstorage = list => {
-  localStorage.tagNaveList1 = JSON.stringify(list)
+  localStorage.tagNaveList2 = JSON.stringify(list)
 }
 /**
  * @returns {Array} 其中的每个元素只包含路由原信息中的name, path, meta三项
  */
 export const getTagNavListFromLocalstorage = () => {
-  const list = localStorage.tagNaveList1
+  const list = localStorage.tagNaveList2
   return list ? JSON.parse(list) : []
 }
 

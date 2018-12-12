@@ -369,7 +369,7 @@ export default {
           {required: true, validator: validateAccount, trigger: 'blur'}
         ],
         adminName: [
-          {validator: validateUserName1, trigger: 'blur'}
+          {required: true, validator: validateUserName, trigger: 'blur'}
         ]
 
       },

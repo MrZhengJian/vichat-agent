@@ -743,11 +743,11 @@ export default {
     // 分页
     changePage (current) {
       this.pages.page = current
-      this._getTableData()
+      this.getMes()
     },
     changePageSize (current) {
       this.pages.rows = current
-      this._getTableData()
+      this.getMes()
     },
     filterMethod (data, query) {
       data = data.label

@@ -52,9 +52,9 @@
                 <FormItem :label="confirm_password" prop="repassword">
                     <Input type="password" v-model='form.repassword' :maxlength='16' :minlength='6' :placeholder="register_repeat_pwd_placeholder" style="width:300px;"></Input>
                 </FormItem>
-                <FormItem :label="user_name" prop="userName">
+                <!-- <FormItem :label="user_name" prop="userName">
                     <Input type="text" v-model='form.userName' :maxlength='20' :placeholder="login_user_placeholder" style="width:300px;"></Input>
-                </FormItem>
+                </FormItem> -->
                 <FormItem :label="contacts" prop="userName">
                     <Input type="text" v-model='form.contactName' :maxlength='20' :placeholder="contacts_palcehoolder" style="width:300px;"></Input>
                 </FormItem>

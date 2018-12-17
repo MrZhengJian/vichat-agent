@@ -8,34 +8,63 @@
 
 <template>
 	<div class="table">
-		<p class="btn-group">
-            <Dropdown style="float:right" trigger="click" @on-click="exportData">
-                <Button type="primary">
-                    {{$t('user_table_btn_export')}}
-                    <Icon type="ios-arrow-down"></Icon>
-                </Button>
-                <DropdownMenu slot="list">
-                    <DropdownItem name='1'>{{$t('all')}}</DropdownItem>
-                    <DropdownItem name='2'>{{$t('current_page')}}</DropdownItem>
-                    <DropdownItem name='3'>{{$t('selected_item')}}</DropdownItem>
-                </DropdownMenu>
-            </Dropdown>
-            <Button type="primary" v-if="accessList.company_account_import" @click="batchImportModal">{{$t('user_table_btn_batchImport')}}</Button>
-            <!-- <Button type="primary" @click="btnClick(4)">{{$t('user_table_btn_location')}}</Button> -->
-            <!-- <Button type="primary" @click="btnClick(3)">{{$t('user_table_btn_delete')}}</Button> -->
-            <Button type="primary" v-if="accessList.company_account_org" @click="btnClick(5)">{{$t('user_table_btn_org')}}</Button>
-            <!-- <Button type="primary" @click="btnClick(8)">{{$t('user_table_col_role_assign')}}</Button> -->
-            <Button type="primary" v-if="accessList.company_account_recharge" @click="btnClick(9)">{{$t('renew')}}</Button>
-            <Button type="primary" v-if="accessList.company_account_add" @click="openAddUser('3')">{{$t('add_terminal')}}</Button>
-            <Button type="primary" v-if="accessList.company_account_add" @click="openAddUser('4')">{{$t('add_dispatcher')}}</Button>
-            <Input search enter-button @on-search="searchBox(0)" v-model="searchTxt" :placeholder="user_table_search_placeholder" style="width: 220px;float:left"></Input>
-            <Select clearable v-model="searchUserType" style="width:180px;float:left;margin-left:20px;" :placeholder="searchByUserType"  @on-change="searchBox(1)">
-                <Option value="1" key="1">{{ $t('employee_type_List1') }}</Option>
-                <Option value="2" key="2">{{ $t('employee_type_List2') }}</Option>
-                <Option value="3" key="3">{{ $t('employee_type_List3') }}</Option>
-                <Option value="4" key="4">{{ $t('employee_type_List4') }}</Option>
-            </Select>
+		<div ref="btnGroup" class="btn-group">
+        <Dropdown style="float:right" trigger="click" @on-click="exportData">
+            <Button type="primary">
+                {{$t('user_table_btn_export')}}
+                <Icon type="ios-arrow-down"></Icon>
+            </Button>
+            <DropdownMenu slot="list">
+                <DropdownItem name='1'>{{$t('all')}}</DropdownItem>
+                <DropdownItem name='2'>{{$t('current_page')}}</DropdownItem>
+                <DropdownItem name='3'>{{$t('selected_item')}}</DropdownItem>
+            </DropdownMenu>
+        </Dropdown>
+
+        <p v-if="!btnCollapse"  style="float:right;display:flex;margin-right:5px;">
+          <Button type="primary" v-if="accessList.company_account_import" @click="batchImportModal">{{$t('user_table_btn_batchImport')}}</Button>
+          <Button type="primary" v-if="accessList.company_account_org" @click="btnClick(5)">{{$t('user_table_btn_org')}}</Button>
+          <Button type="primary" v-if="accessList.company_account_recharge" @click="btnClick(9)">{{$t('renew')}}</Button>
+          <Button type="primary" v-if="accessList.company_account_add" @click="openAddUser('3')">{{$t('add_terminal')}}</Button>
+          <Button type="primary" v-if="accessList.company_account_add" @click="openAddUser('4')">{{$t('add_dispatcher')}}</Button>
         </p>
+        
+        <p v-if="btnCollapse" style="float:right;display:flex;margin-right:5px;">
+          <Tooltip :content="$t('add_dispatcher')">
+            <Button type="primary" v-if="accessList.company_account_add" @click="openAddUser('4')">
+              <Icon type="ios-person-add" />
+            </Button>
+          </Tooltip>
+          <Tooltip :content="$t('add_terminal')">
+            <Button type="primary" v-if="accessList.company_account_add" @click="openAddUser('3')">
+              <Icon type="ios-person-add-outline" />
+            </Button>
+          </Tooltip>
+          <Tooltip :content="$t('renew')">
+            <Button type="primary" v-if="accessList.company_account_recharge" @click="btnClick(9)">
+              <Icon type="md-paper" />
+            </Button>
+          </Tooltip>
+          <Tooltip :content="$t('user_table_btn_org')">
+            <Button type="primary" v-if="accessList.company_account_org"  @click="btnClick(5)">
+              <Icon type="md-contacts" />
+            </Button>
+          </Tooltip>
+          <Tooltip :content="$t('user_table_btn_batchImport')">
+            <Button type="primary" v-if="accessList.company_account_import" @click="batchImportModal">
+              <Icon type="ios-download-outline" />
+            </Button>
+          </Tooltip>
+        </p>
+
+        <Input search enter-button @on-search="searchBox(0)" v-model="searchTxt" :placeholder="user_table_search_placeholder" style="width: 220px;float:left"></Input>
+        <Select clearable v-model="searchUserType" style="width:180px;float:left;margin-left:20px;" :placeholder="searchByUserType"  @on-change="searchBox(1)">
+            <Option value="1" key="1">{{ $t('employee_type_List1') }}</Option>
+            <Option value="2" key="2">{{ $t('employee_type_List2') }}</Option>
+            <Option value="3" key="3">{{ $t('employee_type_List3') }}</Option>
+            <Option value="4" key="4">{{ $t('employee_type_List4') }}</Option>
+        </Select>
+    </div>
 		<div class="table-main">
             <Table ref="table" stripe @on-selection-change="tableSelection" :columns="columns" :data="tableData"></Table>
         </div>
@@ -334,9 +363,9 @@ export default {
   created: function () {
     this._getMes()
   },
-  // mounted:function(){
-  //   console.log(this.accessList)
-  // },
+  mounted:function(){
+    this.btnCollapse = this.$refs.btnGroup.offsetWidth<=900?true:false
+  },
 data () {
     const validateAccount = (rule, value, callback) => {
         value = value.trim()
@@ -387,6 +416,7 @@ data () {
         }
     };
     return {
+      btnCollapse:false,
       allUser:[],
       searchUserType:'',
       accessList:{

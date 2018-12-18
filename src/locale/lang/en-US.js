@@ -470,7 +470,6 @@ export default {
   Type_StyleId6: 'Alarm Group',
 
   channel_create_time: 'Create Time',
-  priority: 'Priority',
   talkable_time: 'Poc Time',
   video_time: 'Video Time',
   Infinite: 'Infinite',
@@ -588,7 +587,16 @@ export default {
   '00008000001': 'SN is exist',
   '00008000002': 'SN not exist',
   '0000100019': 'Please delete the valid users under this enterprise first',
-
+  '0000600001': 'Account has special characters',
+  '0000600002': 'Account is too long',
+  '0000600003': 'User name has special characters',
+  '0000600004': 'User name is too long',
+  '0000600005': 'Phone has special characters',
+  '0000600006': 'Phone is too long',
+  '0000600007': 'SN has special characters',
+  '0000600008': 'SN is too long',
+  '0000600009': 'SN type has special characters',
+  '0000600010': 'SN type is too long',
   'IE_alert': 'If the page cannot be displayed properly, use extreme speed mode or Google browser.'
 
 }

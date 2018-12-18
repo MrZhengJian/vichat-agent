@@ -11,7 +11,7 @@
     <div class="btns">
       <Button style="float:right" v-if="accessList.role_add" type="primary" @click="modal1 = true">{{$t('add_role')}}</Button>
       
-      <Input search enter-button @on-search="_searchText" v-model="searchText" :placeholder="search_role_placeholder" style="width: 300px;float:left"></Input>
+      <Input search enter-button @on-search="_searchText" v-model="searchText" :placeholder="role_name_placeholder" style="width: 300px;float:left"></Input>
     </div>
     <div class="table">
       <Table stripe :columns="columns" :data="tableData" ></Table>
@@ -19,6 +19,7 @@
     <div class="page">
         <div style="float: right;">
             <Page 
+                ref="page"
                 @on-change="changePage" 
                 @on-page-size-change="changePageSize"
                 :total=pages.total 
@@ -279,8 +280,8 @@ export default {
       let _this = this
       let param = {
           page:this.pages.page,
-          limit:this.pages.rows
-
+          limit:this.pages.rows,
+          roleName:this.searchText
       }
       queryPrisonSecRole(param)
       .then(res=>{
@@ -350,19 +351,9 @@ export default {
     },
 
     _searchText(){
-      if(this.searchText==''){
-        this.tableData = this.saveTableData
-        return 
-      }
-      let temp=[]
-      for(let i=0,arr=this.saveTableData;i<arr.length;i++){
-        if( arr[i].roleName.indexOf(this.searchText)>=0 || 
-          arr[i].roleDesc.indexOf(this.searchText)>=0)
-        {
-          temp.push(this.saveTableData[i])
-        }
-      }
-      this.tableData = temp
+      this.$refs.page.currentPage=1
+      this.pages.page = 1
+      this.getRoleList()
     },
     _addRole(n){
       let _this = this

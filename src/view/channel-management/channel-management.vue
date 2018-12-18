@@ -18,7 +18,7 @@
 				{{$t('channel_add_btn')}}
 			</Button>
 			
-      <Input search enter-button @on-search="_searchText" v-model="searchText" :placeholder="channel_search_placeholder" style="width: 250px;float:left"></Input>
+      <Input clearable search enter-button @on-search="_searchText" v-model="searchText" :placeholder="channel_search_placeholder" style="width: 250px;float:left"></Input>
 
 		</div>
 	    <div class="channel" ref="channel">

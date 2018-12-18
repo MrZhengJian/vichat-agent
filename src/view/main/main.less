@@ -1,4 +1,8 @@
-@side_backgrooundColor:#2460A9;
+@side_backgrooundColor:#59b2b1;
+@menu-color:#fff;   //字体颜色
+@side_backgrooundColor2:#50a4a2;   //2级背景色
+@hover1:#71bfbc;
+@hover2:#499492;
 .main{
   .logo-con{
     height: 64px;
@@ -8,8 +12,9 @@
       height: 44px;
       line-height: 44px;
       text-align: center;
-      color:rgb(191,203,217);
+      color:#fff;
       font-size:22px;
+      overflow: hidden;
     }
   }
   .header-con{
@@ -55,24 +60,24 @@
   }
 .ivu-menu{
   background:@side_backgrooundColor !important;
-  color:rgb(191,203,217) !important;
+  color:#fff !important;
 }
 .ivu-menu>li,.ivu-menu-submenu-title{
   background:@side_backgrooundColor !important;
-  color:rgb(191,203,217) !important;
+  color:#fff !important;
 }
 .menu-collapsed i{
-  color:rgb(191,203,217) !important;
+  color:#fff !important;
 }
 .ivu-menu>li:hover,.ivu-menu-submenu-title:hover{
-  background:#0F9CEC !important;
+  background:@hover1 !important;
   color:#fff !important;
 }
 .ivu-menu>li>ul>li{
-  background:#25486E !important;
+  background:@side_backgrooundColor2 !important;
 }
 .ivu-menu>li>ul>li:hover{
-  background:#001528 !important;
+  background:@hover2 !important;
 }
 .ivu-menu-light.ivu-menu-vertical .ivu-menu-item-active:not(.ivu-menu-submenu){
     color:#fff !important;

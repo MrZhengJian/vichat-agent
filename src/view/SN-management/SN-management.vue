@@ -67,7 +67,7 @@
         <Modal :title="modal11Title" v-model="modal11" :width="800">
             <div class="example1">
                 <span style="display:inline-block;text-align:right;">{{$t('agent')}}：</span>
-                <Select filterable v-model="assignAgentId" style="width:300px">
+                <Select clearable filterable v-model="assignAgentId" style="width:300px">
                     <Option v-for="item in agentList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                 </Select>
             </div>
@@ -110,7 +110,7 @@
             >
             <div style="margin:15px 0">
                 <span style="display:inline-block;text-align:right;width:120px;">{{$t('agent')}}：</span>
-                <Select v-model="assignAgentId" style="width:300px">
+                <Select  v-model="assignAgentId" style="width:300px">
                     <Option v-for="item in agentList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                 </Select>
             </div>

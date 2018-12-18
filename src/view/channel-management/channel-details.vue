@@ -12,7 +12,7 @@
         <div class="table">
             <Spin fix size="large" v-show="spin"></Spin>
             <div class="tableTitle">
-                <Input search enter-button @on-search="searchBox" v-model="searchTxt" :placeholder="channel_details_table_search_placeholder" style="width: 250px;float:left"></Input>
+                <Input  clearable search enter-button @on-search="searchBox" v-model="searchTxt" :placeholder="channel_details_table_search_placeholder" style="width: 250px;float:left"></Input>
 
                 <Button @click="addUser" type="primary" style="margin-right:10px">
                     {{$t('channel_details_addUser')}}
@@ -554,7 +554,6 @@ export default {
           _this.personData = res.data.data
           _this.pages.total = _this.channelCount = res.data.count
           _this.spin = false
-          _this.searchTxt = ''
         })
     },
     // 加载穿梭框数据

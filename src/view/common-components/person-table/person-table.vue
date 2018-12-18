@@ -10,7 +10,7 @@
 	<div class="table">
 		<div ref="btnGroup" class="btn-group">
         <Dropdown style="float:right" trigger="click" @on-click="exportData">
-            <Button type="primary">
+            <Button type="primary" style="width:80px;">
                 {{$t('user_table_btn_export')}}
                 <Icon type="ios-arrow-down"></Icon>
             </Button>
@@ -22,11 +22,11 @@
         </Dropdown>
 
         <p v-if="!btnCollapse"  style="float:right;display:flex;margin-right:5px;">
-          <Button type="primary" v-if="accessList.company_account_import" @click="batchImportModal">{{$t('user_table_btn_batchImport')}}</Button>
-          <Button type="primary" v-if="accessList.company_account_org" @click="btnClick(5)">{{$t('user_table_btn_org')}}</Button>
-          <Button type="primary" v-if="accessList.company_account_recharge" @click="btnClick(9)">{{$t('renew')}}</Button>
-          <Button type="primary" v-if="accessList.company_account_add" @click="openAddUser('3')">{{$t('add_terminal')}}</Button>
           <Button type="primary" v-if="accessList.company_account_add" @click="openAddUser('4')">{{$t('add_dispatcher')}}</Button>
+          <Button type="primary" v-if="accessList.company_account_add" @click="openAddUser('3')">{{$t('add_terminal')}}</Button>
+          <Button type="primary" v-if="accessList.company_account_recharge" @click="btnClick(9)">{{$t('renew')}}</Button>
+          <Button type="primary" v-if="accessList.company_account_org" @click="btnClick(5)">{{$t('user_table_btn_org')}}</Button>
+          <Button type="primary" v-if="accessList.company_account_import" @click="batchImportModal">{{$t('user_table_btn_batchImport')}}</Button>
         </p>
         
         <p v-if="btnCollapse" style="float:right;display:flex;margin-right:5px;">
@@ -57,7 +57,7 @@
           </Tooltip>
         </p>
 
-        <Input search enter-button @on-search="searchBox(0)" v-model="searchTxt" :placeholder="user_table_search_placeholder" style="width: 220px;float:left"></Input>
+        <Input clearable search enter-button @on-search="searchBox(0)" v-model="searchTxt" :placeholder="user_table_search_placeholder" style="width: 220px;float:left"></Input>
         <Select clearable v-model="searchUserType" style="width:180px;float:left;margin-left:20px;" :placeholder="searchByUserType"  @on-change="searchBox(1)">
             <Option value="1" key="1">{{ $t('employee_type_List1') }}</Option>
             <Option value="2" key="2">{{ $t('employee_type_List2') }}</Option>
@@ -364,7 +364,7 @@ export default {
     this._getMes()
   },
   mounted:function(){
-    this.btnCollapse = this.$refs.btnGroup.offsetWidth<=900?true:false
+    this.btnCollapse = document.body.clientWidth<=1500<=900?true:false
   },
 data () {
     const validateAccount = (rule, value, callback) => {
@@ -1195,7 +1195,17 @@ methods: {
         this.$refs.uploadExcel.initUpload()
     },
     uploadTableData(data){
-        this.uploadTableDataContent = data
+      let arr = []
+      data.forEach(function(item){
+        let obj = {
+          orgName:item.OrgName,
+          phone:item.Phone,
+          imei:item.SN,
+          userName:item.UserName
+        }
+        arr.push(obj)
+      })
+      this.uploadTableDataContent = arr
     },
     sendBatchImport(){
         let _this = this

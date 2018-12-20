@@ -301,13 +301,15 @@ export default {
             let _this = this
             let params={
                 page:this.page.current,
-                rows:this.page.size,
+                rows:this.page.size
+            }
+            let data = {
                 busiState:this.searchMes.busiState,
-                startDate:this.searchMes.date[0]?dateFormat(new Date(this.searchMes.date[0]),'yyyy-MM-dd'):'',
-                endDate:this.searchMes.date[1]?dateFormat(new Date(this.searchMes.date[1]),'yyyy-MM-dd'):'',
+                startDate:this.searchMes.date[0]?dateFormat(new Date(this.searchMes.date[0]),'yyyy-MM-dd hh:mm:ss'):'',
+                endDate:this.searchMes.date[1]?dateFormat(new Date(this.searchMes.date[1]),'yyyy-MM-dd hh:mm:ss'):'',
                 agentId:this.searchMes.agentId
             }
-            queryCreditRecordAgent(params)
+            queryCreditRecordAgent(params,data)
             .then((res)=>{
                 if(res.data.code==0){
                     _this.page.total = res.data.count

@@ -505,7 +505,7 @@ export default {
                     _this.successCount = res.data.data.successUsers.length
                     _this.importSuccessData = res.data.data.successUsers
                     // _this.$Message.success(_this.$t('assignSuccess'))
-                    // _this.getSnResources()
+                    _this.getSnResources()
                     _this.modal2 = false
                     _this.modal11 = false
 

@@ -7,7 +7,7 @@
     <div class="channel-details">
         <div class="title">
             <p>{{$t('companyNameLabel')}}：{{companyName}}</p>
-            <p class="channelName"><Button @click="back">{{channelName}} {{$t('home_channel')}} / {{channelCount}} {{$t('people')}}</Button></p>
+            <p class="channelName"><Button @click="back">{{$t('channel_details_back')}}</Button></p>
         </div>
         <div class="table">
             <Spin fix size="large" v-show="spin"></Spin>

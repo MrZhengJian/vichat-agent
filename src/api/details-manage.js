@@ -1,11 +1,12 @@
 /* eslint-disable */
 import axios from '@/libs/api.request'
 
-export const queryCreditRecordAgent = (params) => {
+export const queryCreditRecordAgent = (params,data) => {
   return axios.request({
     url: '/agent/api/queryCreditRecordAgent',
-    method: 'get',
-    params
+    method: 'post',
+    params,
+    data
   })
 }
 export const queryCreditRecordCompany = (params) => {

@@ -234,7 +234,7 @@ export default {
   // 登陆
   login_welcome: 'Welcome',
   login_welcome_agent: 'Welcome to Agent',
-  login_user_placeholder: 'Please enter username',
+  login_user_placeholder: 'Please enter user name',
   login_pwd_placeholder: 'Please enter password',
   login_identifying_code: 'Verification code',
   login_btn: 'Login',
@@ -243,7 +243,7 @@ export default {
   login_app_download: 'Scan QR code to download Android app',
   login_Windows_download: 'For Windows',
   login_Andriod_download: 'For Android',
-  login_userName_rules: 'The username can not be empty',
+  login_userName_rules: 'The user name can not be empty',
   login_pwd_rules: 'The password can not be empty',
   login_code_rules1: 'The verification code can not be empty',
   login_code_rules2: 'Verification code format error',
@@ -281,7 +281,7 @@ export default {
   user_table_search_placeholder: 'Search by name or account',
 
   user_table_col_account: 'Account',
-  user_table_col_userName: 'Username',
+  user_table_col_userName: 'User Name',
   user_table_col_orgName: 'Organization',
   user_table_col_userType: 'User Type',
   user_table_col_displayImsPush: 'Location',
@@ -492,7 +492,7 @@ export default {
   channel_details_delete_error: 'Please choose members',
 
   channel_details_table_search_placeholder: 'Search by name',
-  channel_details_table_col_userName: 'Username',
+  channel_details_table_col_userName: 'User Name',
   channel_details_table_col_orgName: 'Organization',
   channel_details_table_col_action: 'Operation',
   channel_details_table_col_delete: 'Delete',
@@ -597,6 +597,7 @@ export default {
   '0000600008': 'SN is too long',
   '0000600009': 'SN type has special characters',
   '0000600010': 'SN type is too long',
+  '00008000003': 'Account not available',
   'IE_alert': 'If the page cannot be displayed properly, use extreme speed mode or Google browser.'
 
 }

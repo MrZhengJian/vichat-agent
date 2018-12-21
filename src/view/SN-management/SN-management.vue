@@ -28,7 +28,7 @@
                     <Button type="primary" @click='search'>&nbsp;&nbsp;{{$t('search')}}&nbsp;&nbsp;</Button>
                 </div>
                 <div class="searchBox" style="float:right">
-                    <Button type="primary" @click="batchImportModal">{{$t('account_import')}} {{$t('assign')}}</Button>
+                    <Button type="primary" @click="batchImportModal">{{$t('account_import')}}{{$t('assign')}}</Button>
                     <Button type="primary" @click="assign" style="margin-left:20px;">{{$t('assign')}}</Button>
                 </div>
                 
@@ -132,7 +132,7 @@
            
             <h1 style="text-align:center;margin:10px;">{{confirmAssign}}</h1>
             <div slot="footer">
-                <Button  type="default" size="large" @click="modal1=false">
+                <Button  type="default" size="large" @click="modal2=false">
                     {{$t('cancel')}}
                 </Button>
                 <Button type="primary" size="large" @click="sendAssign(selection)">

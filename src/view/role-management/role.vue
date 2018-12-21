@@ -329,7 +329,7 @@ export default {
       if(_this.menuList.indexOf('9')>-1||_this.menuList.indexOf('10')>-1){
           _this.menuList.push('1')
       }
-      if(_this.menuList.indexOf('17')){
+      if(_this.menuList.indexOf('17')>-1){
           _this.menuList.push('2')
       }
     },

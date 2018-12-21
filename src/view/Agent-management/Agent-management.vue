@@ -108,10 +108,6 @@
                 <FormItem  :label="RechargeByMonth"  style="margin:12px;">
                     <InputNumber :max="renewPriceMax" :min="1" v-model="renew_form.monthNumber" style="width: 300px"></InputNumber>
                 </FormItem>
-               <!--  <FormItem :label="total"  style="margin:12px;">
-                    <span style="font-size:24px;font-weight:bold"> {{renewCount}} </span>{{$t('month')}}
-                    （ 1 {{$t('people')}} x {{renew_form.monthNumber}} {{$t('month')}} ）
-                </FormItem> -->
                 <FormItem :label="surplus"  style="margin:12px;">
                    <span style="font-size:24px;font-weight:bold"> {{renewBlance}} </span>{{$t('month')}}
                 </FormItem>
@@ -523,7 +519,7 @@ export default {
       getSession()
         .then((res) => {
           if (res.data.code == 0) {
-            _this.renewMax = res.data.data.company.authMonth
+            _this.renewMax = res.data.data.company.authMonth || 0
             _this.modal3 = true
             // console.log(_this.renewMax )
           }

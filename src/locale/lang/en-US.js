@@ -1,4 +1,5 @@
 export default {
+  customer_service: 'Customer Service',
   add_terminal: 'Add Terminal',
   add_dispatcher: 'Add Dispatcher',
   searchByUserType: 'Please select user type',

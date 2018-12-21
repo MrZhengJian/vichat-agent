@@ -1,4 +1,5 @@
 export default {
+  customer_service: '客服',
   add_terminal: '添加终端用户',
   add_dispatcher: '添加调度员',
   searchByUserType: '请选择用户类型',

@@ -32,12 +32,12 @@
         <p v-if="btnCollapse" style="float:right;display:flex;margin-right:5px;">
           <Tooltip :content="$t('add_dispatcher')">
             <Button type="primary" v-if="accessList.company_account_add" @click="openAddUser('4')">
-              <Icon type="ios-person-add" />
+              <Icon custom="iconfont icon-tianjiarenyuan"/>
             </Button>
           </Tooltip>
           <Tooltip :content="$t('add_terminal')">
             <Button type="primary" v-if="accessList.company_account_add" @click="openAddUser('3')">
-              <Icon type="ios-person-add-outline" />
+              <Icon custom="iconfont icon-xitong_tianjiashebei"/>
             </Button>
           </Tooltip>
           <Tooltip :content="$t('renew')">
@@ -363,8 +363,46 @@ export default {
   created: function () {
     this._getMes()
   },
-  mounted:function(){
-    this.btnCollapse = document.body.clientWidth<=1500<=900?true:false
+   mounted:function(){
+    let _this = this
+    
+    // this.winHeight = document.body.clientHeight
+    window.onresize = () => {
+        return (() => {
+            window.screenWidth = document.body.clientWidth
+            _this.winWidth = window.screenWidth
+            // window.screenHeight = document.body.clientHeight
+            // _this.winHeight = window.screenHeight
+        })()
+    }
+  },
+  watch: {
+      // winHeight (val) {
+      //     if (!this.timer) {
+      //         this.winHeight = val
+      //         this.timer = true
+      //         let _this = this
+      //         setTimeout(function () {
+      //             // that.screenWidth = that.$store.state.canvasWidth
+      //             // console.log(_this.winHeight)
+      //             // _this.init()
+      //             _this.timer = false
+      //         }, 400)
+      //     }
+      // },
+      winWidth (val) {
+          if (!this.timer) {
+              this.winWidth = val
+              this.timer = true
+              let _this = this
+              setTimeout(function () {
+                  // that.screenWidth = that.$store.state.canvasWidth
+                  // console.log(_this.winWidth)
+                  // _this.init()
+                  _this.timer = false
+              }, 400)
+          }
+      },
   },
 data () {
     const validateAccount = (rule, value, callback) => {
@@ -416,7 +454,7 @@ data () {
         }
     };
     return {
-      btnCollapse:false,
+      winWidth:document.body.clientWidth,
       allUser:[],
       searchUserType:'',
       accessList:{
@@ -452,6 +490,10 @@ data () {
       locMes: { // 定位信息
         loc: 0,
         locTime: 60
+      },
+      pages:{
+        page:1,
+        rows:10,
       },
       ruleCustom: {
             imei: [
@@ -1072,9 +1114,11 @@ methods: {
     },
 
     changePage (current) {
+       this.pages.page = current
       this.$emit('search', ['page', current])
     },
     changePageSize (pageSize) {
+      this.pages.rows = pageSize
       this.$emit('search', ['limit', pageSize])
     },
     searchBox (n) {
@@ -1133,20 +1177,21 @@ methods: {
             queryEdposUsers({partyId:this.mypartyId})
             .then(res=>{
                 data = _this.turnData(res.data.data)
-                _this.exportData1(data)
+                _this.exportData1(data,_this.$t('allacounts'))
             })
         }else if(n=='2'){
             data = this.tableData
-            this.exportData1(data)
+            let str = _this.$t('pagenum')+_this.pages.page+_this.$t('pageaccount')
+            this.exportData1(data,str)
         }else if(n=='3'){
             data = this.selection
-            this.exportData1(data)
+            this.exportData1(data,_this.$t('selectedaccount'))
         }
       
     },
-    exportData1(data){
+    exportData1(data,name){
       this.$refs.table.exportCsv({
-        filename: this.$t('user_table_information'),
+        filename: this.$t('account')+name,
         columns: this.columns.filter((col, index) => ((index > 1 && index < 6) || index == 7)),
         data: data
       })
@@ -1258,6 +1303,9 @@ methods: {
     }
   },
   computed: {
+    btnCollapse:function(){
+      return this.winWidth<=1500?true:false
+    },
     searchByUserType:function () {
       return this.$t('searchByUserType')
     },

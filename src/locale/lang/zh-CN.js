@@ -1,4 +1,10 @@
 export default {
+  account: '账号',
+  allacounts: '(全部)',
+  pagenum: '(第',
+  pageaccount: '页)',
+  selectedaccount: '(勾选)',
+  batchAssign: '批量分配',
   customer_service: '客服',
   add_terminal: '添加终端用户',
   add_dispatcher: '添加调度员',
@@ -474,7 +480,6 @@ export default {
   Type_StyleId4: '临时频道',
   Type_StyleId6: '告警频道',
   channel_create_time: '创建时间',
-  priority: '优先级',
   talkable_time: '对讲时长',
   video_time: '视频时长',
   Infinite: '不限时',

@@ -1,4 +1,10 @@
 export default {
+  account: 'Account',
+  allacounts: '(Total)',
+  pagenum: '(Page',
+  pageaccount: ')',
+  selectedaccount: '(Selected)',
+  batchAssign: 'Batch Assign',
   customer_service: 'Customer Service',
   add_terminal: 'Add Terminal',
   add_dispatcher: 'Add Dispatcher',

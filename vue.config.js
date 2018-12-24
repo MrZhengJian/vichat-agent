@@ -39,21 +39,21 @@ module.exports = {
   // 这里写你调用接口的基础路径，来解决跨域，如果设置了代理，那你本地开发环境的axios的baseUrl要写为 '' ，即空字符串
   devServer: {
     historyApiFallback: true,
-    port:8088,
+    port: 8088,
     hot: true,
     inline: true,
     stats: { colors: true },
-    proxy: {//192.168.1.135:8080     47.104.186.84
+    proxy: {// 192.168.1.135:8080     47.104.186.84
       // 匹配代理的url
-      
+
       '/agent': {
       // 目标服务器地址
-        target: 'http://47.104.186.84',
-        //路径重写
-        pathRewrite: {'^/agent' : '/agent'},
+        target: 'http://47.104.186.84:6300',
+        // 路径重写
+        pathRewrite: {'^/agent': '/agent'},
         changeOrigin: true
-      },
-      
+      }
+
     }
   }
 

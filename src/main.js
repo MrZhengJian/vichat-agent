@@ -13,6 +13,7 @@ import importDirective from '@/directive'
 import 'iview/dist/styles/iview.css'
 import './index.less'
 import '@/assets/icons/iconfont.css'
+import '@/assets/iconfont/iconfont.css'
 // import '@/mock'
 // 实际打包时应该不引入mock
 

@@ -28,7 +28,7 @@
                     <Button type="primary" @click='search'>&nbsp;&nbsp;{{$t('search')}}&nbsp;&nbsp;</Button>
                 </div>
                 <div class="searchBox" style="float:right">
-                    <Button type="primary" @click="batchImportModal">{{$t('account_import')}}{{$t('assign')}}</Button>
+                    <Button type="primary" @click="batchImportModal">{{$t('batchAssign')}}</Button>
                     <Button type="primary" @click="assign" style="margin-left:20px;">{{$t('assign')}}</Button>
                 </div>
                 
@@ -235,7 +235,7 @@ export default {
                   }
                 },
                 {
-                  title: this.$t('company'),
+                  title: this.$t('agent'),
                   key: 'agentCompanyName',
                   ellipsis: true,
                   render: (h, params) => {
@@ -394,6 +394,7 @@ export default {
         },
         uploadTableData(data){
             let tableData=[]
+            let _this = this
             data.forEach(function(item){
                 let obj={}
                 if(item.SN){
@@ -402,6 +403,7 @@ export default {
                 if(item['SN Type']){
                     obj.snType = item['SN Type']
                 }
+                obj.agentId = _this.myAgentId
                 tableData.push(obj)
             })
             this.uploadTableDataContent = tableData

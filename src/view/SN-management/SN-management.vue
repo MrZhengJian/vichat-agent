@@ -119,7 +119,7 @@
                 <Button  type="default" size="large" @click="modal1=false">
                     {{$t('cancel')}}
                 </Button>
-                <Button type="primary" size="large" @click="modal1=false;modal2=true">
+                <Button type="primary" size="large" @click="comfirmAssign">
                     {{$t('ok')}}
                 </Button>
             </div>
@@ -135,7 +135,7 @@
                 <Button  type="default" size="large" @click="modal2=false">
                     {{$t('cancel')}}
                 </Button>
-                <Button type="primary" size="large" @click="sendAssign(selection)">
+                <Button type="primary" size="large" @click="sendAssign(0)">
                     {{$t('ok')}}
                 </Button>
             </div>
@@ -247,7 +247,39 @@ export default {
                     ])
                   }
                 },
-              
+                {
+                    title: this.$t('org_table_col_action'),
+                    key: 'action',
+                    align: 'center',
+                    fixed: 'right',
+                    width:150,
+                    render: (h, params) => {
+                        return h('div', [
+                            h('Button', 
+                                {
+                                    on: {
+                                        click: () => {
+                                            // params.row.resState = params.row.resState==this.$t('unused')?1:0
+                                            this.singleAssign=[]
+                                            this.singleAssign.push(params.row)
+                                            this.singleAssign[0].resState=this.singleAssign[0].resState==this.$t('unused')?1:0
+                                            this.modal1 = true
+                                            this.isSingleAssign = true
+                                        }
+                                    },
+                                    style:{
+                                        // display:this.accessList.company_edit?'inline-block':'none',
+                                        color:'#2DB7F5',
+                                        cursor:'pointer'
+                                    },
+                                    props: {
+                                        type: 'text',
+                                        size: 'small'
+                                    } 
+                                },this.$t('assign'))
+                        ]);
+                    }
+                }
     
             ],
             page:{
@@ -255,6 +287,8 @@ export default {
                 current:1,
                 size:10
             },
+            singleAssign:[],
+            isSingleAssign:false,
             selection:[],
             selectionUid:[],
             batchImportContent:'',
@@ -481,6 +515,7 @@ export default {
                     return
                 }
             })
+            this.isSingleAssign = false
             if(used){return}
             if (this.selection.length == 0) {
                 this.$Message.warning(this.$t('user_table_select_warning'))
@@ -488,8 +523,19 @@ export default {
                 this.modal1 = true
             }
         },
+        comfirmAssign(){
+            if(this.assignAgentId==0){
+                this.$Message.error(this.$t('user_table_import_agentId_error'))
+                return
+            }
+            this.modal1=false;
+            this.modal2=true
+        },
         sendAssign(data){
             // console.log(data,this.assignAgentId)
+            if(data==0){
+                data = this.isSingleAssign?this.singleAssign:this.selection
+            }
             let _this = this
             let param = {
                 agentId:this.assignAgentId,

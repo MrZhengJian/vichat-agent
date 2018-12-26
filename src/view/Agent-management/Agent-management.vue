@@ -139,12 +139,31 @@
                 </Button>
             </div>
         </Modal>
+        <!-- 修改密码 -->
+        <Modal :title="modal6_title" v-model="modal6">
+            <Form ref="changePassword" :model="changePassword" :label-width="120" :rules="ruleCustom">
+                <FormItem :label="user_table_modal6_newPwd_label" prop="password">
+                    <Input type="password" v-model="changePassword.password" :placeholder="user_table_modal6_newPwd_placeholder" :minlength="6" :maxlength='16' style="width: 300px" ></Input>
+                </FormItem>
+                <FormItem :label="repeat" prop="repassword1">
+                    <Input type="password" v-model="changePassword.repassword1" :placeholder="register_repeat_pwd_placeholder" :minlength="6" :maxlength='16' style="width: 300px" ></Input>
+                </FormItem>
+            </Form>
+            <div slot="footer">
+                <Button type="default" size="large" @click="modal6=false">
+                    {{$t('cancel')}}
+                </Button>
+                <Button type="primary" size="large" @click="sendNewpwd">
+                    {{$t('ok')}}
+                </Button>
+            </div>
+        </Modal>
     </div>
 
 </template>
 
 <script type="ecmascript-6">
-import { queryCompany, batchUpdateCompanyExpiredDate, queryAgentCompany, registerAgentCompany, batchUpdateAgentUsersExpiredDate, saveAgentCompany,deleteAgentCompany} from '@/api/agent'
+import { queryCompany, batchUpdateCompanyExpiredDate, queryAgentCompany, registerAgentCompany, batchUpdateAgentUsersExpiredDate, saveAgentCompany, deleteAgentCompany, chgChildAgentPassword} from '@/api/agent'
 import { getSession} from '@/api/user'
 import {dateFormat} from '@/libs/tools'
 import { mapMutations } from 'vuex'
@@ -188,6 +207,20 @@ export default {
         callback()
       }
     }
+    const validateRepassword1 = (rule, value, callback) => {
+      value = value.trim()
+      if (value === '') {
+        callback(new Error(this.$t('cannotEmpty')))
+      } else if (value.length > 18 || value.length < 6) {
+        callback(new Error(this.$t('pwd_len_rules')))
+      } else if (!/^[a-zA-Z0-9_]+$/.test(value)) {
+        callback(new Error(this.$t('account_reg_error')))
+      } else if (value !== this.changePassword.password) {
+        callback(new Error(this.$t('register_password_repeat')))
+      } else {
+        callback()
+      }
+    }
     const validateUserName = (rule, value, callback) => {
       value = value.trim()
       if (value === '') {
@@ -216,20 +249,26 @@ export default {
         'child_agent_del': this.$store.state.user.funcObj.child_agent_del || false
       },
       parentId: this.$store.state.user.userObj.agentId,
-      agentId:'',
+      agentId: '',
       newQuery: false,
       modal1: false,
       modal2: false,
       modal3: false,
       modal4: false,
-      modal13:false,
+      modal6: false,
+      modal13: false,
       modifyParam: {},
       selectionUid: [],
       selection: [],
     	searchMes: {
     		companyName: '',
     		account: ''
-    	},
+      },
+      changePassword: { // 修改密码时
+        password: '',
+        repassword1: '',
+        agentId: ''
+      },
     	tableData: [],
     	tableColums: [
     		{
@@ -300,6 +339,23 @@ export default {
                 {
                   on: {
                     click: () => {
+                      this.changePwd(params)
+                    }
+                  },
+                  style: {
+                    display: this.accessList.child_agent_del ? 'inline-block' : 'none',
+                    cursor: 'pointer',
+                    color: '#2DB7F5'
+                  },
+                  props: {
+                    type: 'text',
+                    size: 'small'
+                  }
+                }, this.$t('user_table_col_pwd')),
+              h('Button',
+                {
+                  on: {
+                    click: () => {
                       // console.log(params)
                       this.agentId = params.row.agentId
                       this.modal13 = true
@@ -361,6 +417,9 @@ export default {
         repassword: [
           {required: true, validator: validateRepassword, trigger: 'blur'}
         ],
+        repassword1: [
+          {required: true, validator: validateRepassword1, trigger: 'blur'}
+        ],
         account: [
           {required: true, validator: validateAccount, trigger: 'blur'}
         ],
@@ -372,7 +431,7 @@ export default {
       renewMax: 0,
       renew_form: {
         agentIds: '',
-        monthNumber: 1 
+        monthNumber: 1
       },
       renewRule: {
         monthNumber: [
@@ -572,6 +631,31 @@ export default {
           }
         })
     },
+    // 点击修改密码按钮时
+    changePwd (params) {
+      this.modal6 = true
+      this.changePassword.password = ''
+      this.changePassword.repassword1 = ''
+      this.changePassword.agentId = params.row.agentId
+    },
+    // 发送修改密码的新密码
+    sendNewpwd () {
+      const _this = this
+      this.$refs.changePassword.validate((valid) => {
+        if (valid) {
+          chgChildAgentPassword(this.changePassword)
+            .then(function (res) {
+              if (res.data.code == 0) {
+                _this.modal6 = false
+                _this.$Message.success(_this.$t('user_table_modify_ok'))
+                _this.$emit('search')
+              } else {
+                _this.$Message.error(res.data.msg)
+              }
+            })
+        }
+      })
+    }
   },
   computed: {
     modal3_title: function () {
@@ -732,8 +816,19 @@ export default {
     },
     total: function () {
       return this.$t('total')
+    },
+    modal6_title: function () {
+      return this.$t('user_table_modal6_title')
+    },
+    user_table_modal6_newPwd_label: function () {
+      return this.$t('user_table_modal6_newPwd_label')
+    },
+    user_table_modal6_newPwd_placeholder: function () {
+      return this.$t('user_table_modal6_newPwd_placeholder')
+    },
+    repeat: function () {
+      return this.$t('repeat')
     }
-
   },
   mounted: function () {
     window.document.title = localStorage.getItem('platformNameLong')

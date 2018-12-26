@@ -2,7 +2,7 @@
   @import "./common.less";
 </style>
 <template>
-  <div class="uploadExcel">
+  <div class="uploadExcel" style="height:100px;">
       <Row>
         <Upload action="" :before-upload="handleBeforeUpload" accept=".xls, .xlsx">
           <Button icon="ios-cloud-upload-outline" :loading="uploadLoading" @click="handleUploadFile">{{$t('upload')}}</Button>
@@ -69,7 +69,7 @@ export default {
       } else {
         this.$Notice.warning({
           title: this.$t('fileTypeErr'),
-          desc: this.$t('file')+'：'+ file.name + this.$t('fileTypeErrMes')
+          desc: this.$t('file') + '：' + file.name + this.$t('fileTypeErrMes')
         })
       }
       return false
@@ -99,8 +99,8 @@ export default {
         this.uploadLoading = false
         this.tableLoading = false
         this.showRemoveFile = true
-        
-        this.$emit('uploadTableData',this.tableData)
+
+        this.$emit('uploadTableData', this.tableData)
       }
     }
   },

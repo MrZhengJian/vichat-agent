@@ -18,7 +18,7 @@
                 </div>
             </div>
         </Card>
-        
+
         <div class="tableBox">
 	        <Table stripe @on-selection-change="tableSelection" ref="selection" :columns="tableColums" :data="tableData"></Table>
 	    </div>
@@ -55,7 +55,7 @@
                 <!-- <FormItem :label="user_name" prop="userName">
                     <Input type="text" v-model='form.userName' :maxlength='20' :placeholder="login_user_placeholder" style="width:300px;"></Input>
                 </FormItem> -->
-                <FormItem :label="contacts" prop="userName">
+                <FormItem :label="contacts" prop="contactName">
                     <Input type="text" v-model='form.contactName' :maxlength='20' :placeholder="contacts_palcehoolder" style="width:300px;"></Input>
                 </FormItem>
                 <FormItem :label="contacts_number" prop="tel">
@@ -166,7 +166,7 @@ export default {
     const validateUserName1 = (rule, value, callback) => {
       value = value.trim()
       if (value === '') {
-        callback()
+        callback(new Error(this.$t('cannotEmpty')))
       } else if (value.length > 20) {
         callback(new Error(this.$t('max_len_rules')))
       } else {
@@ -333,7 +333,10 @@ export default {
           {required: true, validator: validateUserName, trigger: 'blur'}
         ],
         userName: [
-          {validator: validateUserName1, trigger: 'blur'}
+          {required: true, validator: validateUserName1, trigger: 'blur'}
+        ],
+        contactName: [
+          {required: true, validator: validateUserName, trigger: 'blur'}
         ],
         terminal: [
           {required: true, validator: validateAccount, trigger: 'blur'}

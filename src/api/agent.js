@@ -143,3 +143,11 @@ export const queryAgentCompanyShort = (params) => {
     params
   })
 }
+
+export const chgChildAgentPassword = (params) => {
+  return axios.request({
+    url: '/agent/api/chgChildAgentPassword',
+    method: 'get',
+    params
+  })
+}

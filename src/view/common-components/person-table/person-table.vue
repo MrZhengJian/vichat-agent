@@ -1114,7 +1114,7 @@ methods: {
     },
 
     changePage (current) {
-       this.pages.page = current
+      this.pages.page = current
       this.$emit('search', ['page', current])
     },
     changePageSize (pageSize) {
@@ -1123,6 +1123,7 @@ methods: {
     },
     searchBox (n) {
       this.$refs.pages.currentPage=1
+      this.pages.page = 1
       if(n==0){
         this.$emit('search', ['userName', this.searchTxt])
       }else if(n==1){

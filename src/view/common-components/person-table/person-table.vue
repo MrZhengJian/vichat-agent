@@ -47,7 +47,7 @@
           </Tooltip>
           <Tooltip :content="$t('user_table_btn_org')">
             <Button type="primary" v-if="accessList.company_account_org"  @click="btnClick(5)">
-              <Icon type="md-contacts" />
+              <Icon custom="iconfont icon-org"/>
             </Button>
           </Tooltip>
           <Tooltip :content="$t('user_table_btn_batchImport')">

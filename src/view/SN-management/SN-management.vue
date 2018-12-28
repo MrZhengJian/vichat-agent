@@ -261,7 +261,7 @@ export default {
                                         click: () => {
                                             // params.row.resState = params.row.resState==this.$t('unused')?1:0
                                             this.singleAssign=[]
-                                            this.singleAssign.push(params.row)
+                                            this.singleAssign.push(JSON.parse(JSON.stringify(params.row)))
                                             this.singleAssign[0].resState=this.singleAssign[0].resState==this.$t('unused')?1:0
                                             this.modal1 = true
                                             this.isSingleAssign = true
@@ -269,10 +269,12 @@ export default {
                                     },
                                     style:{
                                         // display:this.accessList.company_edit?'inline-block':'none',
-                                        color:'#2DB7F5',
+                                        color:params.row.resState==this.$t('used')?'#ccc':'#2DB7F5',
+                                        // color:'#2DB7F5',
                                         cursor:'pointer'
                                     },
                                     props: {
+                                        disabled:params.row.resState==this.$t('used')?true:false,
                                         type: 'text',
                                         size: 'small'
                                     } 
@@ -510,13 +512,16 @@ export default {
             let used = false
             this.selection.forEach(function(item){
                 if(item.resState==0){
-                    _this.$Message.error( _this.$t('usedError'))
+                    
                     used = true
                     return
                 }
             })
             this.isSingleAssign = false
-            if(used){return}
+            if(used){
+                this.$Message.error( _this.$t('usedError'))
+                return
+            }
             if (this.selection.length == 0) {
                 this.$Message.warning(this.$t('user_table_select_warning'))
             } else {

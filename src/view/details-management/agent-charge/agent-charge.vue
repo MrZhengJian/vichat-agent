@@ -224,7 +224,7 @@ export default {
       },
       busiStateList: [
         {
-          value: '',
+          value: '0',
           label: this.$t('all')
         },
         {
@@ -298,7 +298,7 @@ export default {
         rows: this.page.size
       }
       let data = {
-        busiState: this.searchMes.busiState,
+        busiState: this.searchMes.busiState==0?'':this.searchMes.busiState,
         startDate: this.searchMes.date[0] ? dateFormat(new Date(this.searchMes.date[0]), 'yyyy-MM-dd hh:mm:ss') : '',
         endDate: this.searchMes.date[1] ? dateFormat(new Date(this.searchMes.date[1]), 'yyyy-MM-dd hh:mm:ss') : '',
         agentId: this.searchMes.agentId

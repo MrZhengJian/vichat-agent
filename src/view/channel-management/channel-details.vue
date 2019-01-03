@@ -147,7 +147,7 @@
                 </FormItem>
                 <FormItem :label="priorityLabel" >
                     <Select v-model="empMes.priority" style="width:300px" >
-                        <Option :disabled='item.value==10&&empMes.adminGrade!=10' v-for="item in priorityList" :value="item.value" :key="item.value">{{ item.desc }}</Option>
+                        <Option :disabled='item.value==10' v-for="item in priorityList" :value="item.value" :key="item.value">{{ item.desc }}</Option>
                     </Select>
                 </FormItem>
                 <FormItem :label="timelenLabel" style="width:300px">

@@ -90,7 +90,6 @@ export default {
         this.$Message.error(this.$t('fileReadErr'))
       }
       reader.onload = e => {
-        this.$Message.info(this.$t('fileReadSuc'))
         const data = e.target.result
         const { header, results } = excel.read(data, 'array')
         const tableTitle = header.map(item => { return { title: item, key: item } })

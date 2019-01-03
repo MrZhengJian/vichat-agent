@@ -961,7 +961,11 @@ methods: {
         }else if(modal == 8 && n>=0){
             this.$Message.warning(this.$t('user_table_enterprise_warning8'))
             return
+        }else if(modal == 5 && n>=0){
+            this.$Message.warning(this.$t('user_table_enterprise_warning5'))
+            return
         }
+
       }
 
         let _this = this
@@ -1241,17 +1245,30 @@ methods: {
         this.$refs.uploadExcel.initUpload()
     },
     uploadTableData(data){
-      let arr = []
-      data.forEach(function(item){
-        let obj = {
-          orgName:item.OrgName,
-          phone:item.Phone,
-          imei:item.SN,
-          userName:item.UserName
+      let myTableData = []
+      let _this = this
+      for(let i=0;i<data.length;i++){
+          if(!data[i].SN||!data[i].OrgName||!data[i].UserName){
+            this.$Message.error(this.$t('impotError'))
+            this.$refs.uploadExcel.tableData=[]
+            this.$refs.uploadExcel.tableTitle=[]
+            this.$refs.uploadExcel.showProgress=false
+            this.$refs.uploadExcel.file=null
+            return
+          }
+          let obj = {
+            imei:data[i].SN,
+            orgName:data[i].OrgName,
+            userName:data[i].UserName
+          } 
+          if(data[i].Phone){
+            obj.phone = data[i].Phone
+          }
+
+          myTableData.push(obj)
         }
-        arr.push(obj)
-      })
-      this.uploadTableDataContent = arr
+      this.uploadTableDataContent = myTableData
+      this.$Message.success(this.$t('fileReadSuc'))
     },
     sendBatchImport(){
         let _this = this

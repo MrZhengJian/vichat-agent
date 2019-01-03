@@ -1,4 +1,5 @@
 export default {
+  impotError:'The import format is incorrect, please refer to the example to modify',
   account: 'Account',
   allacounts: '(Total)',
   pagenum: '(Page',
@@ -320,7 +321,7 @@ export default {
   user_table_select_warning: 'Please choose the item',
   user_table_enterprise_warning3: 'Enterprise users cannot be deleted',
   user_table_enterprise_warning8: 'Enterprise user roles cannot be modified',
-
+  user_table_enterprise_warning5: 'Enterprise user organization cannot be modified',
   user_table_modal1_title: 'Add User',
   user_table_modal1_account_label: 'Account',
   user_table_modal1_account_placeholder: 'Please enter account',
@@ -605,6 +606,7 @@ export default {
   '0000600009': 'SN type has special characters',
   '0000600010': 'SN type is too long',
   '00008000003': 'Account not available',
+  '0000100020': 'User name is empty',
   'IE_alert': 'If the page cannot be displayed properly, use extreme speed mode or Google browser.'
 
 }

@@ -1,4 +1,5 @@
 export default {
+  impotError:'导入格式错误，请参照示例进行修改',
   account: '账号',
   allacounts: '(全部)',
   pagenum: '(第',
@@ -323,6 +324,7 @@ export default {
   user_table_select_warning: '请选择内容',
   user_table_enterprise_warning3: '不能删除企业用户',
   user_table_enterprise_warning8: '不能修改企业用户角色',
+  user_table_enterprise_warning5: '不能修改企业用户组织',
 
   user_table_modal1_title: '添加员工',
   user_table_modal1_account_label: '账号',
@@ -606,5 +608,6 @@ export default {
   '0000600009': 'SN 类型存在特殊字符',
   '0000600010': 'SN 类型过长',
   '00008000003': '账号不可用',
+  '0000100020': '用户名为空',
   'IE_alert': '如果网页无法正常显示，请使用极速模式或谷歌浏览器'
 }

@@ -430,20 +430,24 @@ export default {
         },
         uploadTableData(data){
             let tableData=[]
-            let _this = this
-            data.forEach(function(item){
-                let obj={}
-                if(item.SN){
-                    obj.sn = item.SN
+            for(let i=0;i<data.length;i++){
+                if(!data[i].SN||!data[i]['SN Type']){
+                    this.$Message.error(this.$t('impotError'))
+                    this.$refs.uploadExcel.tableData=[]
+                    this.$refs.uploadExcel.tableTitle=[]
+                    this.$refs.uploadExcel.showProgress=false
+                    this.$refs.uploadExcel.file=null
+                    return
                 }
-                if(item['SN Type']){
-                    obj.snType = item['SN Type']
-                }
-                obj.agentId = _this.myAgentId
+                let obj = {
+                    sn:data[i].SN,
+                    snType:data[i]['SN Type'],
+                } 
+
                 tableData.push(obj)
-            })
+            }
+           
             this.uploadTableDataContent = tableData
-            // console.log(tableData)
         },
         sendBatchImport(){
 

@@ -28,7 +28,7 @@
             </div>
         </Card>
         <div class="content">
-                <Table @on-selection-change="tableSelection" ref="selection" :columns="tableColums" :data="tableData"></Table>
+          <Table @on-selection-change="tableSelection" ref="selection" :columns="tableColums" :data="tableData"></Table>
         </div>
         
         <div class="page">
@@ -99,6 +99,7 @@ export default {
     },
     data () {
         return {
+            company_account_recharge:this.$store.state.user.funcObj.company_account_recharge||false,
             tableData:[],
             tableColums:[
                 {
@@ -184,13 +185,13 @@ export default {
                           },
                           style: {
                             cursor: 'pointer',
-                            // color: (this.personData[params.index].userType!='1'?'#ccc':'#2DB7F5')
-                            color: '#2DB7F5'
+                            color: !this.company_account_recharge?'#ccc':'#2DB7F5'
+                            // color: '#2DB7F5'
                           },
                           props: {
                             type: 'text',
                             size: 'small',
-                            // disabled:(this.personData[params.index].userType!='1'?true:false)
+                            disabled:!this.company_account_recharge?true:false
                           }
                         }, this.$t('renew')),
                     ])
@@ -241,6 +242,10 @@ export default {
             getExpiringUsers(param)
             .then(res=>{
                 if(res.data.code==0){
+                    if(res.data.data.length==0&&this.page.page!=1){
+                        this.page.page--
+                        this.queryExpiringUsers()
+                    }
                     _this.page.total = res.data.count
                     _this.turnData(res.data.data)
                 }
@@ -254,6 +259,7 @@ export default {
             this.tableData = data
         },
         search(){
+            this.$refs.page.currentPage=1
             this.page.page=1
             this.queryExpiringUsers()
         },

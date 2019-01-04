@@ -377,6 +377,11 @@ export default {
       queryCompany(param)
         .then(function (res) {
           if (res.data.code == 0) {
+            if(res.data.data.length==0&&_this.page.page!=1){
+              _this.page.page--
+              _this.queryEdposCompany()
+              return
+            }
             // _this.$Message.success('加载成功')
             _this.page.total = res.data.count
             _this.trunTableData(res.data.data)
@@ -518,6 +523,7 @@ export default {
     },
     clear () {
       this.form = {
+        contactName: '',
         terminal: '',
         companyName: '',
         userName: '',

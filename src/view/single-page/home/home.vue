@@ -53,7 +53,7 @@
             </Row>
             <Row>
                 <Col :span='10'>{{$t('expiringUserNum')}}</Col>
-                <Col :span='14'>{{count.expiringUserNum}} <a @click="toDetails" style="margin-left:20px;">{{$t('channel_col_view')}}</a></Col>
+                <Col :span='14'>{{count.expiringUserNum}} <a @click="toDetails" v-if="company_account" style="margin-left:20px;">{{$t('channel_col_view')}}</a></Col>
             </Row>
         </Card>
     </div>
@@ -72,6 +72,7 @@ export default {
     },
     data () {
         return {
+            company_account:this.$store.state.user.funcObj.company_account||false,
             count: {
                 accountNum: 0,
                 agentCompanyNum: 0,

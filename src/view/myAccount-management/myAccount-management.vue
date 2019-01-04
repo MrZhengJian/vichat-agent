@@ -2,7 +2,7 @@
     <div class="my_account">
         <div class="main">
             <div class="btns">
-                <Input search enter-button @on-keyup="searchBox(-1)" @on-search="searchBox" :placeholder="searchByNameOrAccount" v-model="searchTxt"  style="width: 250px;float:left"></Input>
+                <Input search clearable enter-button @on-keyup="searchBox(-1)" @on-search="searchBox" :placeholder="searchByNameOrAccount" v-model="searchTxt"  style="width: 250px;float:left"></Input>
                 <!-- <Button type="primary" v-if="accessList.account_import" @click="batchImportModal">{{$t('user_table_btn_batchImport')}}</Button> -->
                 <Button type="primary" v-if="accessList.account_add" @click="openAddUser">{{$t('user_table_btn_add')}}</Button>
             </div>
@@ -516,6 +516,11 @@ export default {
       queryAgentUser(params)
         .then(res => {
           if (res.data.code == 0) {
+            if(res.data.data.length==0&&_this.pages.page!=1){
+              _this.pages.page--
+              _this._getMes()
+              return
+            }
             _this.tableData = _this.turnData(res.data.data)
             _this.pages.total = res.data.count
           }
@@ -555,7 +560,6 @@ export default {
       this._getMes()
     },
     searchBox (n) {
-      console.log(n)
       this.$refs.pages.currentPage = 1
       this.pages.page = 1
       if (n == -1) {

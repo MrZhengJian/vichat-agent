@@ -11,7 +11,7 @@
     <div class="btns">
       <Button style="float:right" v-if="accessList.role_add" type="primary" @click="modal1 = true">{{$t('add_role')}}</Button>
       
-      <Input search enter-button @on-search="_searchText" v-model="searchText" :placeholder="role_name_placeholder" style="width: 300px;float:left"></Input>
+      <Input search enter-button clearable @on-search="_searchText" v-model="searchText" :placeholder="role_name_placeholder" style="width: 300px;float:left"></Input>
     </div>
     <div class="table">
       <Table stripe :columns="columns" :data="tableData" ></Table>
@@ -286,6 +286,11 @@ export default {
       queryPrisonSecRole(param)
       .then(res=>{
         if(res.data.code==0){
+          if(res.data.data.length==0&&_this.pages.page!=1){
+            _this.pages.page--
+            _this.getRoleList()
+            return
+          }
           _this.pages.total = res.data.count
           _this.tableData = res.data.data
           _this.saveTableData = JSON.parse(JSON.stringify(res.data.data))

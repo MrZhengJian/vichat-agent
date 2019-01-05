@@ -385,6 +385,10 @@ export default {
       }
       queryChannels(params)
         .then(function (res) {
+          if(res.data.data.length==0&&_this.pages.page>1){
+            _this.pages.page--
+            _this._getMes ()
+          }
           // console.log(res.data.count)
           _this.pages.total = res.data.count
           _this.spin = false

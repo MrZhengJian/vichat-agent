@@ -61,6 +61,11 @@
                 <FormItem :label="contacts_number" prop="tel">
                     <Input type="text" v-model="form.tel" :placeholder="user_table_modal1_tel_placeholder" style="width:300px;"></Input>
                 </FormItem>
+                <FormItem :label="functions" >
+                    <CheckboxGroup v-model="formFunction">
+                      <Checkbox v-for="item in functionList" :label="item.value">{{item.label}}</Checkbox>
+                    </CheckboxGroup>
+                </FormItem>
             </Form>
             <div slot="footer">
                 <Button type="default" size="large" @click="modal3=false">{{$t('cancel')}}</Button>
@@ -83,6 +88,11 @@
 
                 <FormItem :label="contacts_number" prop="tel">
                     <Input type="text" v-model="form.tel" :placeholder="user_table_modal1_tel_placeholder" style="width:300px;"></Input>
+                </FormItem>
+                <FormItem :label="functions" >
+                    <CheckboxGroup v-model="formFunction">
+                      <Checkbox v-for="item in functionList" :label="item.value">{{item.label}}</Checkbox>
+                    </CheckboxGroup>
                 </FormItem>
             </Form>
             <div slot="footer">
@@ -187,16 +197,16 @@ export default {
       modal2: false,
       modal3: false,
       modal4: false,
-        	modal13: false,
+      modal13: false,
       selectionUid: [],
       selection: [],
-        	searchMes: {
-        		name: '',
-        		freeType: '',
-        		terminal: ''
-        	},
-        	tableData: [],
-        	tableColums: [
+      searchMes: {
+        name: '',
+        freeType: '',
+        terminal: ''
+      },
+      tableData: [],
+      tableColums: [
         {
           title: this.$t('register_firm_name_label'),
           key: 'companyName'
@@ -319,6 +329,7 @@ export default {
         current: 1,
         size: 10
       },
+      formFunction:[],
       form: {
         terminal: '',
         companyName: '',
@@ -326,8 +337,15 @@ export default {
         password: '',
         repassword: '',
         userName: '',
-        contactName: ''
+        contactName: '',
+        function:''
       },
+      functionList:[
+        {
+          value:0,
+          label:this.$t('QuickAlarm')
+        } 
+      ],
       ruleCustom: {
         companyName: [
           {required: true, validator: validateUserName, trigger: 'blur'}
@@ -458,6 +476,8 @@ export default {
     },
     submit () {
       let _this = this
+      // console.log(this.form.function)
+      // return
       this.$refs.companyform.validate((valid) => {
         if (valid) {
           if (this.form.password != this.form.repassword) {
@@ -467,6 +487,19 @@ export default {
           delete this.form.repassword
           // this.form.userNumber = this.form.terminal
           this.form.authNumber = this.form.freeType == '1' ? 1000 : -1
+
+
+          let str = ''
+          this.functionList.forEach(item=>{
+            if(this.formFunction.indexOf(item.value)>-1){
+              str+=1
+            }else{
+              str+=0
+            }
+          })
+          this.form.function = str
+
+
           registerCompany(this.form)
             .then(function (res) {
               // console.log( _this.form)
@@ -487,6 +520,14 @@ export default {
       this.form.companyName = param.row.companyName || ''
       this.form.userName = param.row.userName || ''
       this.form.tel = param.row.tel || ''
+
+      for(let i=0,arr=param.row.function;i<arr.length;i++){
+        if(arr[i]=='1'){
+          this.formFunction.push(i)
+        }
+      }
+
+      // this.formFunction = param.row.userName || ''
       this.modal4 = true
     },
     saveModify () {
@@ -498,6 +539,17 @@ export default {
           this.modifyObj.userName = this.form.userName
           this.modifyObj.tel = this.form.tel
           delete this.modifyObj.createTime
+
+          let str = ''
+          this.functionList.forEach(item=>{
+            if(this.formFunction.indexOf(item.value)>-1){
+              str+=1
+            }else{
+              str+=0
+            }
+          })
+          this.modifyObj.function = str
+
           saveCompany(this.modifyObj)
             .then(res => {
               if (res.data.code == 0) {
@@ -642,6 +694,9 @@ export default {
     },
     user_name: function () {
       return this.$t('user_name')
+    },
+    functions: function () {
+      return this.$t('functions')
     }
 
   },

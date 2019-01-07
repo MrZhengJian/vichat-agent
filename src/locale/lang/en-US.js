@@ -1,5 +1,7 @@
 export default {
-  impotError:'The import format is incorrect, please refer to the example to modify',
+  functions: 'Functions',
+  QuickAlarm: 'Quick Alarm',
+  impotError: 'The import format is incorrect, please refer to the example to modify',
   account: 'Account',
   allacounts: '(Total)',
   pagenum: '(Page',

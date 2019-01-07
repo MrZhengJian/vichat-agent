@@ -1,5 +1,7 @@
 export default {
-  impotError:'导入格式错误，请参照示例进行修改',
+  functions: '功能',
+  QuickAlarm: '一键告警',
+  impotError: '导入格式错误，请参照示例进行修改',
   account: '账号',
   allacounts: '(全部)',
   pagenum: '(第',

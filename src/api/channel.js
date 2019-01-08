@@ -64,7 +64,7 @@ export const batchDeleteRoomMember = (params) => {
 
 export const switchRec = (params) => {
   return axios.request({
-    url: '/agent/switchRec',
+    url: '/agent/api/switchRec',
     method: 'post',
     params
   })

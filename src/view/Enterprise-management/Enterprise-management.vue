@@ -344,6 +344,10 @@ export default {
         {
           value:0,
           label:this.$t('QuickAlarm')
+        },
+        {
+          value:1,
+          label:this.$t('rec')
         } 
       ],
       ruleCustom: {
@@ -395,7 +399,7 @@ export default {
       queryCompany(param)
         .then(function (res) {
           if (res.data.code == 0) {
-            if(res.data.data.length==0&&_this.page.page!=1){
+            if(res.data.data.length==0&&_this.page.page>1){
               _this.page.page--
               _this.queryEdposCompany()
               return
@@ -520,12 +524,14 @@ export default {
       this.form.companyName = param.row.companyName || ''
       this.form.userName = param.row.userName || ''
       this.form.tel = param.row.tel || ''
-
-      for(let i=0,arr=param.row.function;i<arr.length;i++){
-        if(arr[i]=='1'){
-          this.formFunction.push(i)
+      if(param.row.function){
+        for(let i=0,arr=param.row.function;i<arr.length;i++){
+          if(arr[i]=='1'){
+            this.formFunction.push(i)
+          }
         }
       }
+      
 
       // this.formFunction = param.row.userName || ''
       this.modal4 = true

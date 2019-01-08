@@ -196,7 +196,7 @@ export default {
                       },
                       props: {
                           value:params.row.record==1,
-                          disabled:(this.$store.state.user.record!=1)
+                          // disabled:(this.$store.state.user.record!=1)
                       }  
                   })
               ])

@@ -28,7 +28,7 @@
             </div>
         </Card>
         <div class="content">
-          <Table @on-selection-change="tableSelection" ref="selection" :columns="tableColums" :data="tableData"></Table>
+          <Table stripe @on-selection-change="tableSelection" ref="selection" :columns="tableColums" :data="tableData"></Table>
         </div>
         
         <div class="page">

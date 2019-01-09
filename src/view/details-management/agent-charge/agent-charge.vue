@@ -30,7 +30,7 @@
             </div>
         </Card>
     	<div class="content" ref='content'>
-          <Table :columns="columns" :data="tableData"></Table>
+          <Table stripe :columns="columns" :data="tableData"></Table>
       </div>
       <div class="pages">
           <div>

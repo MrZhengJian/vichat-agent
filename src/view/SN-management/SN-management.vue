@@ -44,7 +44,7 @@
                 
             </div>
             <div class="tableBox">
-                <Table @on-selection-change="tableSelection" ref="selection" :columns="tableColums" :data="tableData"></Table>
+                <Table stripe @on-selection-change="tableSelection" ref="selection" :columns="tableColums" :data="tableData"></Table>
             </div>
         </div>
         
@@ -91,10 +91,10 @@
             >
             <Tabs type="card" @on-click="tabChange">
                 <TabPane :label="successList" name="name1">
-                    <Table border :columns="importSuccessColumns" :data="importSuccessData"></Table>
+                    <Table stripe border :columns="importSuccessColumns" :data="importSuccessData"></Table>
                 </TabPane>
                 <TabPane :label="errorList" name="name2">
-                    <Table border :columns="importFailurecolumns" :data="importFailureData"></Table>
+                    <Table stripe border :columns="importFailurecolumns" :data="importFailureData"></Table>
                 </TabPane>
             </Tabs>
             <div slot="footer">
